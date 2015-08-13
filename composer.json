@@ -1,0 +1,33 @@
+{
+  "name": "fulfillment/oms-api",
+  "description": "A wrapper for Fulfillment's OMS API",
+  "keywords": [
+    "fulfillment",
+    "fulfillment.com"
+  ],
+  "license": "MIT",
+  "type": "library",
+  "homepage": "https://github.com/Fufillment/oms-api-php",
+  "authors":[
+    {
+      "name": "Matt Duncan"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "~5.0",
+    "respect/validation": "0.9.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Fulfillment\\OMS\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Fulfillment\\OMS\\Tests\\": "tests"
+    }
+  }
+}
