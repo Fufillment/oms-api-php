@@ -38,6 +38,7 @@ class Order extends Base\Order
             v::attribute('orderId', v::notEmpty()),
             v::attribute('items', v::arr()), //TODO custom validation rule to test all of these
             v::attribute('recipient', v::instance('Fulfillment\OMS\Models\Request\Recipient')),
+            v::attribute('recipient', v::callback([$this->recipient, 'validate'])),
             v::attribute('shippingMethod', v::string())
         ];
     }
