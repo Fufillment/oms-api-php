@@ -29,6 +29,8 @@ trait ValidatableBase
         }
         if (!empty($errors)) {
             throw new ValidationFailureException("Validation failed for this object.", $errors);
+        } else {
+            return true;
         }
     }
 }
