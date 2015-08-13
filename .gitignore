@@ -8,3 +8,4 @@ vendor/
 .idea
 oms-api-php.iml
 composer.lock
+.env
