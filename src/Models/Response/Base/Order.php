@@ -11,27 +11,80 @@ namespace Fulfillment\OMS\Models\Response\Base;
 
 abstract class Order extends \Fulfillment\OMS\Models\Request\Base\Order
 {
+    /**
+     * @var int
+     */
     public $id;
+    /**
+     * @var string
+     */
     public $merchantOrderId;
+
     public $status;
+    /**
+     * @var float
+     */
     public $shippingCharge;
+    /**
+     * @var float
+     */
     public $totalOz;
+    /**
+     * @var string
+     */
     public $trackingNo;
+    /**
+     * @var \DateTime
+     */
     public $orderedDate;
+    /**
+     * @var \DateTime
+     */
     public $recordedOn;
+    /**
+     * @var \DateTime
+     */
     public $departDate;
+    /**
+     * @var \DateTime
+     */
     public $deliveryDate;
+    /**
+     * @var \DateTime
+     */
     public $returnDate;
+    /**
+     * @var bool
+     */
     public $forceAddress;
+    /**
+     * @var bool
+     */
     public $testOrder;
+    /**
+     * @var bool
+     */
     public $canSplit;
+    /**
+     * @var bool
+     */
     public $hold;
+    /**
+     * @var bool
+     */
     public $isParentOrder;
+
     public $orderItems;
+
     public $originalConsignee;
+
     public $validatedConsignee;
+
     public $statusHistory;
+
     public $trackingSummary;
+
     public $trackingEvents;
+
     public $orderSkus;
 }
