@@ -8,10 +8,7 @@
 
 namespace Fulfillment\OMS\Models\Request\Base;
 
-
-use Fulfillment\OMS\Contracts\Validatable;
-
-abstract class Order implements Validatable
+abstract class Order
 {
     public $merchantId;
     public $orderId;

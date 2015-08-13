@@ -8,10 +8,7 @@
 
 namespace Fulfillment\OMS\Models\Request\Base;
 
-
-use Fulfillment\OMS\Contracts\Validatable;
-
-abstract class Recipient implements Validatable
+abstract class Recipient
 {
     //required
     public $email;

@@ -8,12 +8,13 @@
 
 namespace Fulfillment\OMS\Models\Request;
 
+use Fulfillment\OMS\Contracts\Validatable;
 use Fulfillment\OMS\Models\Request\Base\Recipient as RecipientBase;
 use Fulfillment\OMS\Models\ValidatableBase;
 use Fulfillment\OMS\Utilities\ArrayUtil;
 use Respect\Validation\Validator as v;
 
-class Order extends Base\Order
+class Order extends Base\Order implements Validatable
 {
     use ValidatableBase;
 
