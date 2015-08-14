@@ -9,6 +9,9 @@
 namespace Fulfillment\OMS\Models\Response\Base;
 
 
+use Fulfillment\OMS\Models\Response\OrderItem;
+use Fulfillment\OMS\Models\Response\OrderStatus;
+
 abstract class Order extends \Fulfillment\OMS\Models\Request\Base\Order
 {
     /**
@@ -19,7 +22,9 @@ abstract class Order extends \Fulfillment\OMS\Models\Request\Base\Order
      * @var string
      */
     public $merchantOrderId;
-
+    /**
+     * @var OrderStatus
+     */
     public $status;
     /**
      * @var float
@@ -74,17 +79,30 @@ abstract class Order extends \Fulfillment\OMS\Models\Request\Base\Order
      */
     public $isParentOrder;
 
+    /**
+     * @var OrderItem[]
+     */
     public $orderItems;
-
+    /**
+     * @var Recipient
+     */
     public $originalConsignee;
-
+    /**
+     * @var Recipient
+     */
     public $validatedConsignee;
 
+    /**
+     * @var OrderStatus[]
+     */
     public $statusHistory;
 
     public $trackingSummary;
 
     public $trackingEvents;
 
+    /**
+     * @var OrderSku[]
+     */
     public $orderSkus;
 }
