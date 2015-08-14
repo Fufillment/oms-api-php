@@ -25,8 +25,11 @@ class ApiRequestBase
      * @param GuzzleHttp\Client $guzzle
      * @param $config array
      * @param CLImate $climate
+     * @param bool $validateRequests Default behavior for validating POST and PUT requests.  Will validate objects before making the request
+     * @param \Closure $setCb
+     * @param \Closure $getCb
      */
-    public function __construct(GuzzleHttp\Client $guzzle, $config, CLImate $climate, \Closure $setCb, \Closure $getCb)
+    public function __construct(GuzzleHttp\Client $guzzle, $config, CLImate $climate, \Closure $setCb, \Closure $getCb, $validateRequests = true)
     {
         $this->guzzle     = $guzzle;
         $this->config     = $config;
@@ -34,6 +37,7 @@ class ApiRequestBase
         $this->tokenSetCb = $setCb;
         $this->tokenGetCb = $getCb;
         $this->jsonMapper = new \JsonMapper();
+        $this->validateRequests = $validateRequests;
     }
 
     function requestAccessToken()
