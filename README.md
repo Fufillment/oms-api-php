@@ -3,7 +3,7 @@ A PHP library that wraps Fulfillment's OMS API for easy use
 
 ## Example
 
-```
+```php
 use Fulfillment\OMS;
 use Fulfillment\OMS\Models\Request;
 
@@ -39,9 +39,9 @@ There are two ways to configure OMS API
 
 **Use dotenv**
 
-Use a `.env` file compatible with fantastic [phpdotenv](https://github.com/vlucas/phpdotenv) library. Simple specify the absolute path to the folder containing your `.env` file as an argument in the OMS constructor.
+Use a `.env` file compatible with fantastic [phpdotenv](https://github.com/vlucas/phpdotenv) library. Simply specify the absolute path to the folder containing your `.env` file as an argument in the OMS constructor.
 
-```
+```php
 $apiWrapper = new OMS('absolute/path/to/a/folder')
 ```
 
@@ -51,7 +51,7 @@ An example file called `.env.example` can be found in the root directory.
 
 Alternatively, create an array with key/values matching the above specified configuration and pass it as an argument in the OMS constructor.
 
-```
+```php
 $apiWrapper = new OMS($yourConfigurationArray)
 ```
 
@@ -66,7 +66,7 @@ Models (plain PHP classes) are used by the wrapper to facilitate easy building, 
 Found at `Fulfillment\OMS\Models\Request` these are the models that are used when making any request that requires data (such as a POST or PUT request). Currenty you will need to use the implemented models to make these type of requests. They differ slightly from the other type (`Response` model) because they do not require as much data as is returned from the api.
 
 Example
-```
+```php
 $newOrder = new Order($myOrderData);
 $order = $apiWrapper->orders->createOrder($newOrder);
 ```
@@ -76,7 +76,7 @@ $order = $apiWrapper->orders->createOrder($newOrder);
 Found at `Fulfillment\OMS\Models\Response` these are the models that response json is parsed in to. They inherit from `Request` models and so can be reused to make requests.
 
 Example
-```
+```php
 $returnedOrder = $apiWrapper->orders->getOrder($orderId);
 ```
 
