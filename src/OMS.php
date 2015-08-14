@@ -49,9 +49,10 @@ class OMS
                 if (!is_dir($config)) {
                     throw new \Exception('The provided directory location does not exist at ' . $config);
                 }
-                $dotenv = new Dotenv\Dotenv($config);
-                $dotenv->load();
-                $dotenv->required(['OMS_ENDPOINT']);
+                Dotenv::load($config);
+                //$dotenv = new Dotenv\Dotenv($config);
+                //$dotenv->load();
+                Dotenv::required(['OMS_ENDPOINT']);
 
             }
             $this->apiKey       = getenv('API_KEY');
