@@ -9,7 +9,12 @@
 namespace Fulfillment\OMS\Models\Response;
 
 
-class Order extends Base\Order
-{
+use Fulfillment\OMS\Contracts\Validatable;
+use Fulfillment\OMS\Models\ValidatableBase;
+use Fulfillment\OMS\Models\Validation\Traits\OrderValidation;
 
+class Order extends Base\Order implements Validatable
+{
+    use ValidatableBase;
+    use OrderValidation;
 }

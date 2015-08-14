@@ -1,15 +1,13 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: mduncan
- * Date: 8/13/15
- * Time: 2:43 PM
- */
 
 namespace Fulfillment\OMS\Models\Response;
 
+use Fulfillment\OMS\Contracts\Validatable;
+use Fulfillment\OMS\Models\ValidatableBase;
+use Fulfillment\OMS\Models\Validation\Traits\RecipientValidation;
 
-class Recipient extends Base\Recipient
+class Recipient extends Base\Recipient implements Validatable
 {
-    public $iso2;
+    use ValidatableBase;
+    use RecipientValidation;
 }
