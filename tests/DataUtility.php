@@ -14,15 +14,20 @@ class DataUtility
     public static function requestOrder()
     {
         return [
-            'merchantId' => 1234,
-            'orderId' => 'test123',
-            'items' => [],
+            'merchantId' => 50001,
+            'orderId' => 'asupertest123',
+            'items' => [
+                ['sku' => 'pizza',
+                    'declaredValue' => 4.20,
+                    'quantity' => 2]
+            ],
             'recipient' => DataUtility::requestRecipient(),
             'shippingMethod' => 'USPS'
         ];
     }
 
-    public static function requestRecipient(){
+    public static function requestRecipient()
+    {
         return [
             'firstName' => 'Joe',
             'lastName' => 'Schmoe',
