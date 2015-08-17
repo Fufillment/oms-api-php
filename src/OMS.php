@@ -11,6 +11,7 @@ require __DIR__.'/../vendor/autoload.php';
 
 
 use Dotenv;
+use Fulfillment\OMS\Api\ApiRequestBase;
 use Fulfillment\OMS\Api\OrdersApi;
 use Fulfillment\OMS\Utilities\ArrayUtil;
 use League\CLImate\CLImate;
@@ -83,6 +84,12 @@ class OMS
         $getTokenCb = function(){
             return $this->accessToken;
         };
+
+        if(is_null($this->accessToken) || $this->accessToken === false){
+            //if they don't have an access token we need to try to get one
+            $base = new ApiRequestBase($this->guzzle, $this->bundleConfig(), $this->climate, $tokenCb, $getTokenCb);
+            $base->requestAccessToken();
+        }
 
         //instantiate api
         $this->orders = new OrdersApi($this->guzzle, $this->bundleConfig(), $this->climate, $tokenCb, $getTokenCb);
