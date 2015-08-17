@@ -12,6 +12,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Dotenv;
 use Fulfillment\OMS\Api\ApiRequestBase;
+use Fulfillment\OMS\Api\InventoryApi;
 use Fulfillment\OMS\Api\OrdersApi;
 use Fulfillment\OMS\Utilities\ArrayUtil;
 use League\CLImate\CLImate;
@@ -93,6 +94,7 @@ class OMS
 
         //instantiate api
         $this->orders = new OrdersApi($this->guzzle, $this->bundleConfig(), $this->climate, $tokenCb, $getTokenCb);
+        $this->inventory = new InventoryApi($this->guzzle, $this->bundleConfig(), $this->climate, $tokenCb, $getTokenCb);
     }
 
     private function bundleConfig()
