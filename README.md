@@ -35,6 +35,10 @@ Configuration needed is simple:
 * **ACCESS_TOKEN** - If already created, an access token for your merchant
 * **OMS_ENDPOINT** - The end point for the fulfillment api services you are using (https://api.fulfillment.com)
 
+Optional Configurations:
+
+* **JSON_ONLY** - Defaults to false. If set to true all responses will be returned as pure JSON as it is from the server.
+
 There are two ways to configure OMS API
 
 **Use dotenv**

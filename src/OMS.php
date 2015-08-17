@@ -7,7 +7,7 @@
  */
 
 namespace Fulfillment\OMS;
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 
 use Dotenv;
@@ -40,7 +40,7 @@ class OMS
      */
     public function __construct($config)
     {
-        $this->guzzle = new GuzzleHttp\Client();
+        $this->guzzle  = new GuzzleHttp\Client();
         $this->climate = new CLImate;
         //defined('STDOUT');
 
@@ -51,8 +51,6 @@ class OMS
                     throw new \Exception('The provided directory location does not exist at ' . $config);
                 }
                 Dotenv::load($config);
-                //$dotenv = new Dotenv\Dotenv($config);
-                //$dotenv->load();
                 Dotenv::required(['OMS_ENDPOINT']);
 
             }
@@ -61,12 +59,14 @@ class OMS
             $this->clientSecret = getenv('CLIENT_SECRET');
             $this->accessToken  = getenv('ACCESS_TOKEN');
             $this->endPoint     = getenv('OMS_ENDPOINT');
+            $this->jsonOnly     = getenv('JSON_ONLY');
         } else if (is_array($config)) {
             $this->apiKey       = ArrayUtil::get($config['API_KEY']);
             $this->clientId     = ArrayUtil::get($config['CLIENT_ID']);
             $this->clientSecret = ArrayUtil::get($config['CLIENT_SECRET']);
             $this->accessToken  = ArrayUtil::get($config['ACCESS_TOKEN']);
             $this->endPoint     = ArrayUtil::get($config['OMS_ENDPOINT']);
+            $this->jsonOnly     = ArrayUtil::get($config['JSON_ONLY'], false);
         } else {
             throw new \InvalidArgumentException('A configuration must be provided');
         }
@@ -78,14 +78,14 @@ class OMS
             throw new \InvalidArgumentException('Must provide an endpoint');
         }
 
-        $tokenCb = function($token){
+        $tokenCb    = function ($token) {
             $this->accessToken = $token;
         };
-        $getTokenCb = function(){
+        $getTokenCb = function () {
             return $this->accessToken;
         };
 
-        if(is_null($this->accessToken) || $this->accessToken === false){
+        if (is_null($this->accessToken) || $this->accessToken === false) {
             //if they don't have an access token we need to try to get one
             $base = new ApiRequestBase($this->guzzle, $this->bundleConfig(), $this->climate, $tokenCb, $getTokenCb);
             $base->requestAccessToken();
@@ -95,13 +95,15 @@ class OMS
         $this->orders = new OrdersApi($this->guzzle, $this->bundleConfig(), $this->climate, $tokenCb, $getTokenCb);
     }
 
-    private function bundleConfig(){
+    private function bundleConfig()
+    {
         return [
             'apiKey' => $this->apiKey,
             'clientId' => $this->clientId,
             'clientSecret' => $this->clientSecret,
             'accessToken' => $this->accessToken,
-            'endPoint' => $this->endPoint
+            'endPoint' => $this->endPoint,
+            'jsonOnly' => $this->jsonOnly
         ];
     }
 }

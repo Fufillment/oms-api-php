@@ -35,7 +35,13 @@ class OrdersApi extends ApiRequestBase
         $queryString['toDate']   = $toDate;
 
         $ordersJson = $this->makeRequest('get', 'orders/', null, $queryString);
-        $orders     = $this->jsonMapper->mapArray($ordersJson, [], 'Fulfillment\OMS\Models\Response\Order');
+
+        if ($this->config['jsonOnly']) {
+            $orders = $ordersJson;
+        } else {
+            $orders = $this->jsonMapper->mapArray($ordersJson, [], 'Fulfillment\OMS\Models\Response\Order');
+        }
+
         return $orders;
     }
 
@@ -50,29 +56,40 @@ class OrdersApi extends ApiRequestBase
     public function getOrder($orderId)
     {
         $orderJson = $this->makeRequest('get', 'orders/' . $orderId);
-        $order     = $this->jsonMapper->map($orderJson, new Order());
+
+        if ($this->config['jsonOnly']) {
+            $order = $orderJson;
+        } else {
+            $order = $this->jsonMapper->map($orderJson, new Order());
+        }
+
         return $order;
     }
 
     /**
      * Create a new order in the Fulfillment system
      *
-     * @param \Fulfillment\OMS\Models\Request\Order $order
+     * @param \Fulfillment\OMS\Models\Request\Order|array $order
      * @return object
      * @throws \Exception
      * @throws \Fulfillment\OMS\Exceptions\ValidationFailureException
      * @throws \JsonMapper_Exception
      */
-    public function createOrder(\Fulfillment\OMS\Models\Request\Order $order)
+    public function createOrder($order)
     {
-        if ($this->validateRequests) {
+        if ($order instanceof \Fulfillment\OMS\Models\Request\Order && $this->validateRequests) {
             $order->validate();
         }
 
         $orderJson = $this->makeRequest('post', 'orders', $order);
 
-        $returnedOrder = $this->jsonMapper->map($orderJson, new Order());
-        return $returnedOrder;
+        if ($this->config['jsonOnly']) {
+            $order = $orderJson;
+        } else {
+            $order = $this->jsonMapper->map($orderJson, new Order());
+        }
+
+        return $order;
     }
 
     /**
@@ -90,13 +107,16 @@ class OrdersApi extends ApiRequestBase
      * Update the recipient of the specified Order
      *
      * @param $orderId
-     * @param Recipient $recipient
+     * @param Recipient|array $recipient
      * @throws \Exception
      * @throws \Fulfillment\OMS\Exceptions\ValidationFailureException
      */
-    public function updateRecipient($orderId, Recipient $recipient)
+    public function updateRecipient($orderId, $recipient)
     {
-        $recipient->validate();
+        if ($recipient instanceOf Recipient && $this->validateRequests) {
+            $recipient->validate();
+        }
+
         $this->makeRequest('put', 'orders' . $orderId, $recipient);
     }
 
@@ -104,13 +124,16 @@ class OrdersApi extends ApiRequestBase
      * Add an OrderSku to the specified Order
      *
      * @param $orderId
-     * @param OrderSku $orderSku
+     * @param OrderSku|array $orderSku
      * @throws \Exception
      * @throws \Fulfillment\OMS\Exceptions\ValidationFailureException
      */
-    public function addSku($orderId, OrderSku $orderSku)
+    public function addSku($orderId, $orderSku)
     {
-        $orderSku->validate();
+        if ($orderSku instanceof OrderSku && $this->validateRequests) {
+            $orderSku->validate();
+        }
+
         $this->makeRequest('post', 'orders/' . $orderId . '/skus', $orderSku);
     }
 
@@ -123,8 +146,12 @@ class OrdersApi extends ApiRequestBase
      * @throws \Exception
      * @throws \Fulfillment\OMS\Exceptions\ValidationFailureException
      */
-    public function updateSku($orderId, $orderSkuId, OrderSku $orderSku)
+    public function updateSku($orderId, $orderSkuId, $orderSku)
     {
+        if ($orderSku instanceof OrderSku && $this->validateRequests) {
+            $orderSku->validate();
+        }
+
         $orderSku->validate();
         $this->makeRequest('put', 'orders/' . $orderId . '/skus/', $orderSkuId, $orderSku);
     }
