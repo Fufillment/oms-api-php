@@ -84,12 +84,12 @@ class OrdersApi extends ApiRequestBase
         $orderJson = $this->makeRequest('post', 'orders', $order);
 
         if ($this->config['jsonOnly']) {
-            $order = $orderJson;
+            $returnOrder = $orderJson;
         } else {
-            $order = $this->jsonMapper->map($orderJson, new Order());
+            $returnOrder = $this->jsonMapper->map($orderJson, new Order());
         }
 
-        return $order;
+        return $returnOrder;
     }
 
     /**
