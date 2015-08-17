@@ -79,6 +79,7 @@ class ApiRequestBase
         $accessTokenJson = json_decode($accessTokenResponse->getBody());
 
         $this->climate->info('Got new access token!');
+        $this->climate->info('Token: '  . $accessTokenJson->access_token);
 
         call_user_func($this->tokenSetCb, $accessTokenJson->access_token);
         $this->config['accessToken'] = $accessTokenJson->access_token;
