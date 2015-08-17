@@ -31,12 +31,12 @@ class ApiRequestBase
      */
     public function __construct(GuzzleHttp\Client $guzzle, $config, CLImate $climate, \Closure $setCb, \Closure $getCb, $validateRequests = true)
     {
-        $this->guzzle     = $guzzle;
-        $this->config     = $config;
-        $this->climate    = $climate;
-        $this->tokenSetCb = $setCb;
-        $this->tokenGetCb = $getCb;
-        $this->jsonMapper = new \JsonMapper();
+        $this->guzzle           = $guzzle;
+        $this->config           = $config;
+        $this->climate          = $climate;
+        $this->tokenSetCb       = $setCb;
+        $this->tokenGetCb       = $getCb;
+        $this->jsonMapper       = new \JsonMapper();
         $this->validateRequests = $validateRequests;
     }
 
@@ -80,8 +80,10 @@ class ApiRequestBase
 
         $this->climate->info('Got new access token!');
 
-        call_user_func($this->tokenSetCb, [$accessTokenJson->access_token]);
+        call_user_func($this->tokenSetCb, $accessTokenJson->access_token);
         $this->config['accessToken'] = $accessTokenJson->access_token;
+
+
     }
 
     /**
@@ -137,6 +139,7 @@ class ApiRequestBase
 
         } catch (GuzzleHttp\Exception\RequestException $e) {
             $this->climate->error('Request failed with status code ' . $e->getResponse()->getStatusCode());
+            $this->printError($e);
 
             if ($e->getResponse()->getStatusCode() == 401) {
                 if ($firstTry) {
