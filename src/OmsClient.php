@@ -23,7 +23,7 @@ use GuzzleHttp;
 
 date_default_timezone_set('Europe/London');
 
-class OMS
+class OmsClient
 {
     public $orders;
 
