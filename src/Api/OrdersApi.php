@@ -34,9 +34,9 @@ class OrdersApi extends ApiRequestBase
         $queryString['fromDate'] = $fromDate;
         $queryString['toDate']   = $toDate;
 
-        $ordersJson = $this->makeRequest('get', 'orders/', null, $queryString);
+        $ordersJson = $this->apiClient->get('orders', $queryString);
 
-        if ($this->config['jsonOnly']) {
+        if ($this->jsonOnly) {
             $orders = $ordersJson;
         } else {
             $orders = $this->jsonMapper->mapArray($ordersJson, [], 'Fulfillment\OMS\Models\Response\Order');
@@ -55,9 +55,9 @@ class OrdersApi extends ApiRequestBase
      */
     public function getOrder($orderId)
     {
-        $orderJson = $this->makeRequest('get', 'orders/' . $orderId);
+        $orderJson = $this->apiClient->get('orders/' . $orderId);
 
-        if ($this->config['jsonOnly']) {
+        if ($this->jsonOnly) {
             $order = $orderJson;
         } else {
             $order = $this->jsonMapper->map($orderJson, new Order());
@@ -81,9 +81,9 @@ class OrdersApi extends ApiRequestBase
             $order->validate();
         }
 
-        $orderJson = $this->makeRequest('post', 'orders', $order);
+        $orderJson = $this->apiClient->post('orders', $order);
 
-        if ($this->config['jsonOnly']) {
+        if ($this->jsonOnly) {
             $returnOrder = $orderJson;
         } else {
             $returnOrder = $this->jsonMapper->map($orderJson, new Order());
@@ -100,7 +100,7 @@ class OrdersApi extends ApiRequestBase
      */
     public function cancelOrder($orderId)
     {
-        $this->makeRequest('delete', 'orders/' . $orderId);
+        $this->apiClient->delete('orders/' . $orderId);
     }
 
     /**
@@ -117,7 +117,7 @@ class OrdersApi extends ApiRequestBase
             $recipient->validate();
         }
 
-        $this->makeRequest('put', 'orders' . $orderId, $recipient);
+        $this->apiClient->put('orders/' . $orderId .'/recipient', $recipient);
     }
 
     /**
@@ -134,7 +134,7 @@ class OrdersApi extends ApiRequestBase
             $orderSku->validate();
         }
 
-        $this->makeRequest('post', 'orders/' . $orderId . '/skus', $orderSku);
+        $this->apiClient->post('orders/' . $orderId . '/skus', $orderSku);
     }
 
     /**
@@ -153,7 +153,7 @@ class OrdersApi extends ApiRequestBase
         }
 
         $orderSku->validate();
-        $this->makeRequest('put', 'orders/' . $orderId . '/skus/', $orderSkuId, $orderSku);
+        $this->apiClient->put('orders/' . $orderId . '/skus/', $orderSkuId, $orderSku);
     }
 
     /**
@@ -165,7 +165,7 @@ class OrdersApi extends ApiRequestBase
      */
     public function deleteSku($orderId, $orderSkuId)
     {
-        $this->makeRequest('delete', 'orders/' . $orderId . '/skus/', $orderSkuId);
+        $this->apiClient->delete('orders/' . $orderId . '/skus/', $orderSkuId);
     }
 
 
