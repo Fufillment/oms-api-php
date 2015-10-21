@@ -7,7 +7,7 @@ A PHP library that wraps Fulfillment's OMS API for easy use
 use Fulfillment\OMS;
 use Fulfillment\OMS\Models\Request;
 
-$apiWrapper = new OMS(__DIR__); //instantiate OMS with a configuration file or array of settings
+$apiWrapper = new OmsClient(__DIR__); //instantiate OMS with a configuration file or array of settings
 
 $newOrder = new Order($orderData); //create a new Request\Order
 
@@ -29,11 +29,12 @@ composer require fulfillment/oms-api
 
 Configuration needed is simple:
 
-* **API_KEY** - Api key for your merchant.
+* **USERNAME** - Email address for your account
+* **PASSWORD** - Password for your account
 * **CLIENT_ID** - Client Id for your merchant
 * **CLIENT_SECRET** - Client secret for your merchant
 * **ACCESS_TOKEN** - If already created, an access token for your merchant
-* **OMS_ENDPOINT** - The end point for the fulfillment api services you are using (https://api.fulfillment.com)
+* **API_ENDPOINT** - The end point for the fulfillment api services you are using (https://api.fulfillment.com)
 
 Optional Configurations:
 
@@ -46,7 +47,7 @@ There are two ways to configure OMS API
 Use a `.env` file compatible with fantastic [phpdotenv](https://github.com/vlucas/phpdotenv) library. Simply specify the absolute path to the folder containing your `.env` file as an argument in the OMS constructor.
 
 ```php
-$apiWrapper = new OMS('absolute/path/to/a/folder')
+$apiWrapper = new OmsClient('absolute/path/to/a/folder')
 ```
 
 An example file called `.env.example` can be found in the root directory.
@@ -56,7 +57,7 @@ An example file called `.env.example` can be found in the root directory.
 Alternatively, create an array with key/values matching the above specified configuration and pass it as an argument in the OMS constructor.
 
 ```php
-$apiWrapper = new OMS($yourConfigurationArray)
+$apiWrapper = new OmsClient($yourConfigurationArray)
 ```
 
 ## Usage
