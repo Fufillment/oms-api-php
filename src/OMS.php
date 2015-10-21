@@ -25,16 +25,6 @@ date_default_timezone_set('Europe/London');
 
 class OMS
 {
-    protected $apiKey;
-    protected $clientId;
-    protected $clientSecret;
-    protected $accessToken;
-    protected $endPoint;
-    protected $config;
-
-    protected $guzzle;
-    protected $climate;
-
     public $orders;
 
     /**
