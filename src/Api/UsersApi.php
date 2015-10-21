@@ -24,9 +24,9 @@ class UsersApi extends ApiRequestBase
      */
     public function getUsers($queryString)
     {
-        $json = $this->makeRequest('get', 'users', null, $queryString);
+        $json = $this->apiClient->get('users', $queryString);
 
-        if ($this->config['jsonOnly']) {
+        if ($this->jsonOnly) {
             $users = $json;
         } else {
             $users = $this->jsonMapper->mapArray($json, [], 'Fulfillment\OMS\Models\Response\User');
@@ -44,9 +44,9 @@ class UsersApi extends ApiRequestBase
      */
     public function getUser($userId)
     {
-        $json = $this->makeRequest('get', 'users/' . $userId);
+        $json = $this->apiClient->get('users/' . $userId);
 
-        if ($this->config['jsonOnly']) {
+        if ($this->jsonOnly) {
             $user = $json;
         } else {
             $user = $this->jsonMapper->map($json, new User());
@@ -69,9 +69,9 @@ class UsersApi extends ApiRequestBase
         if ($user instanceof \Fulfillment\OMS\Models\Request\User && $this->validateRequests) {
             $user->validate();
         }
-        $json = $this->makeRequest('post', 'users/', $user);
+        $json = $this->apiClient->post('users/', $user);
 
-        if ($this->config['jsonOnly']) {
+        if ($this->jsonOnly) {
             $returnUser = $json;
         } else {
             $returnUser = $this->jsonMapper->map($json, new User());
@@ -93,7 +93,7 @@ class UsersApi extends ApiRequestBase
             $user->validate();
         }
 
-        $this->makeRequest('put', 'users/' . $userId, $user);
+        $this->apiClient->put('users/' . $userId, $user);
     }
 
     /**
@@ -104,7 +104,7 @@ class UsersApi extends ApiRequestBase
      */
     public function deleteUser($userId)
     {
-        $this->makeRequest('delete', 'users/' . $userId);
+        $this->apiClient->delete('users/' . $userId);
     }
 
     /**
@@ -119,7 +119,7 @@ class UsersApi extends ApiRequestBase
      */
     public function changeUserPassword($userId, $currentPassword, $newPassword)
     {
-        $this->makeRequest('put', 'users/' . $userId . '/password', ['currentPassword' => $currentPassword, 'newPassword' => $newPassword]);
+        $this->apiClient->put('users/' . $userId . '/password', ['currentPassword' => $currentPassword, 'newPassword' => $newPassword]);
     }
 
     /**
@@ -132,7 +132,7 @@ class UsersApi extends ApiRequestBase
      */
     public function resetUserPassword($userId)
     {
-        $this->makeRequest('get', 'users/' . $userId . '/password/reset');
+        $this->apiClient->get('users/' . $userId . '/password/reset');
     }
 
     /**
@@ -144,7 +144,7 @@ class UsersApi extends ApiRequestBase
      */
     public function addRoles($userId, $rolesArray)
     {
-        $this->makeRequest('put', 'users/' . $userId, $rolesArray);
+        $this->apiClient->put('users/' . $userId, $rolesArray);
     }
 
     /**
@@ -156,7 +156,7 @@ class UsersApi extends ApiRequestBase
      */
     public function deleteRoles($userId, $rolesArray)
     {
-        $this->makeRequest('delete', 'users/' . $userId, $rolesArray);
+        $this->apiClient->delete('users/' . $userId, $rolesArray);
     }
 
     /**
@@ -169,7 +169,7 @@ class UsersApi extends ApiRequestBase
      */
     public function generatePasswordToken($email)
     {
-        $this->makeRequest('post', 'generatePasswordToken', ['email' => $email]);
+        $this->apiClient->post('generatePasswordToken', ['email' => $email]);
     }
 
     /**
@@ -181,6 +181,6 @@ class UsersApi extends ApiRequestBase
      */
     public function resetPassword($token, $newPassword)
     {
-        $this->makeRequest('post', 'resetPassword', ['token' => $token, 'newPassword' => $newPassword]);
+        $this->apiClient->post('resetPassword', ['token' => $token, 'newPassword' => $newPassword]);
     }
 }
