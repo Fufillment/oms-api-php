@@ -21,8 +21,8 @@ class InventoryApi extends ApiRequestBase
      */
     public function listInventory()
     {
-        $json = $this->makeRequest('get', 'inventory/');
-        if($this->config['jsonOnly']){
+        $json = $this->apiClient->get('inventory');
+        if($this->jsonOnly){
             $inventory = $json;
         } else {
             $inventory = $this->jsonMapper->mapArray($json, [], 'Fulfillment\OMS\Models\Response\Inventory');
@@ -39,8 +39,8 @@ class InventoryApi extends ApiRequestBase
      * @throws \JsonMapper_Exception
      */
     public function getInventory($inventoryId){
-        $json = $this->makeRequest('get', 'inventory/' . $inventoryId);
-        if($this->config['jsonOnly']){
+        $json = $this->apiClient->get('inventory/' . $inventoryId);
+        if($this->jsonOnly){
             $inventory = $json;
         } else {
             $inventory = $this->jsonMapper->map($json, new Inventory());
