@@ -47,37 +47,42 @@ class OmsClient
                 Dotenv::required(['API_ENDPOINT']);
 
             }
-            $username     = getenv('USERNAME') ?: null;
-            $password     = getenv('PASSWORD') ?: null;
-            $clientId     = getenv('CLIENT_ID') ?: null;
-            $clientSecret = getenv('CLIENT_SECRET') ?: null;
-            $accessToken  = getenv('ACCESS_TOKEN') ?: null;
-            $endpoint     = getenv('API_ENDPOINT') ?: null;
-            $authEndpoint = getenv('AUTH_ENDPOINT') ?: null;
-            $jsonOnly     = getenv('JSON_ONLY') ?: null;
-        } else if (is_array($config)) {
-            $username   = ArrayUtil::get($config['username']);
-            $password   = ArrayUtil::get($config['password']);
-            $clientId     = ArrayUtil::get($config['clientId']);
-            $clientSecret = ArrayUtil::get($config['clientSecret']);
-            $accessToken  = ArrayUtil::get($config['accessToken']);
-            $endpoint     = ArrayUtil::get($config['endpoint']);
-            $authEndpoint = ArrayUtil::get($config['authEndpoint']);
-            $jsonOnly     = ArrayUtil::get($config['jsonOnly'], false);
+            $username           = getenv('USERNAME') ?: null;
+            $password           = getenv('PASSWORD') ?: null;
+            $clientId           = getenv('CLIENT_ID') ?: null;
+            $clientSecret       = getenv('CLIENT_SECRET') ?: null;
+            $accessToken        = getenv('ACCESS_TOKEN') ?: null;
+            $endpoint           = getenv('API_ENDPOINT') ?: null;
+            $authEndpoint       = getenv('AUTH_ENDPOINT') ?: null;
+            $jsonOnly           = getenv('JSON_ONLY') ?: null;
+            $storageTokenPrefix = getenv('STORAGE_TOKEN_PREFIX') ?: null;
         } else {
-            throw new \InvalidArgumentException('A configuration must be provided');
+            if (is_array($config)) {
+                $username           = ArrayUtil::get($config['username']);
+                $password           = ArrayUtil::get($config['password']);
+                $clientId           = ArrayUtil::get($config['clientId']);
+                $clientSecret       = ArrayUtil::get($config['clientSecret']);
+                $accessToken        = ArrayUtil::get($config['accessToken']);
+                $endpoint           = ArrayUtil::get($config['endpoint']);
+                $authEndpoint       = ArrayUtil::get($config['authEndpoint']);
+                $storageTokenPrefix = ArrayUtil::get($config['storageTokenPrefix']);
+                $jsonOnly           = ArrayUtil::get($config['jsonOnly'], false);
+            } else {
+                throw new \InvalidArgumentException('A configuration must be provided');
+            }
         }
 
         $apiConfig = new ApiConfiguration([
-            'username' => $username,
-            'password' => $password,
-            'clientId' => $clientId,
-            'clientSecret' => $clientSecret,
-            'accessToken' => $accessToken,
-            'endpoint' => $endpoint,
-            'authEndpoint' => $authEndpoint,
-            'scope' => 'oms'
-        ]);
+                                              'username'           => $username,
+                                              'password'           => $password,
+                                              'clientId'           => $clientId,
+                                              'clientSecret'       => $clientSecret,
+                                              'accessToken'        => $accessToken,
+                                              'endpoint'           => $endpoint,
+                                              'authEndpoint'       => $authEndpoint,
+                                              'storageTokenPrefix' => $storageTokenPrefix,
+                                              'scope'              => 'oms'
+                                          ]);
 
         $apiClient = new Api($apiConfig);
         //instantiate api
