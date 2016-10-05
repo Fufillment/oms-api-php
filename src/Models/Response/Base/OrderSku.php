@@ -9,18 +9,6 @@
 namespace Fulfillment\OMS\Models\Response\Base;
 
 
-abstract class OrderSku extends \Fulfillment\OMS\Models\Request\Base\OrderSku
-{
-    /**
-     * @var int
-     */
-    public $id;
-    /**
-     * @var bool
-     */
-    public $isValid;
-    /**
-     * @var string
-     */
-    public $reason;
+abstract class OrderSku extends \Fulfillment\OMS\Models\Request\Base\OrderSku implements \Fulfillment\OMS\Models\Response\Contracts\OrderSku {
+
 }

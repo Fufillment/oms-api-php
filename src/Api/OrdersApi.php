@@ -39,28 +39,28 @@ class OrdersApi extends ApiRequestBase
         if ($this->jsonOnly) {
             $orders = $ordersJson;
         } else {
-            $orders = $this->jsonMapper->mapArray($ordersJson, [], 'Fulfillment\OMS\Models\Response\Order');
+            $orders = $this->jsonMapper->mapArray($ordersJson, [], 'Fulfillment\OMS\Models\Response\Contracts\Order');
         }
 
         return $orders;
     }
 
-    /**
-     * Return the Order with the specified Id
-     *
-     * @param $orderId
-     * @return object
-     * @throws \Exception
-     * @throws \JsonMapper_Exception
-     */
-    public function getOrder($orderId)
+	/**
+	 * Return the Order with the specified Id
+	 *
+	 * @param int $orderId Id of order to retrieve
+	 * @param \Fulfillment\OMS\Models\Response\Contracts\Order $classToMapTo A class implementing the Response Order Contract to map the json into
+	 *
+	 * @return object
+	 */
+    public function getOrder($orderId, $classToMapTo = Order::class)
     {
         $orderJson = $this->apiClient->get('orders/' . $orderId);
 
         if ($this->jsonOnly) {
             $order = $orderJson;
         } else {
-            $order = $this->jsonMapper->map($orderJson, new Order());
+            $order = $this->jsonMapper->map($orderJson, new $classToMapTo());
         }
 
         return $order;
