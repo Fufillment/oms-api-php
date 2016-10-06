@@ -8,15 +8,14 @@
 
 namespace Fulfillment\OMS\Api;
 
+use Fulfillment\OMS\Models\Request\Contracts\User;
+use Fulfillment\OMS\Models\Response\Contracts\Inventory;
+use Fulfillment\OMS\Models\Response\Contracts\Merchant;
 use Fulfillment\OMS\Models\Response\Contracts\MerchantBalanceAudit;
 use Fulfillment\OMS\Models\Response\Contracts\MerchantShippingMethod;
 use Fulfillment\OMS\Models\Response\Contracts\OrderAccountingAudit;
 use Fulfillment\OMS\Models\Response\Contracts\Product;
 use Fulfillment\OMS\Models\Response\Contracts\Sku;
-use Fulfillment\OMS\Models\Response\Inventory;
-use Fulfillment\OMS\Models\Response\Merchant;
-use Fulfillment\OMS\Models\Response\MerchantFees;
-use phpDocumentor\Reflection\Types\Object_;
 
 class MerchantApi extends ApiRequestBase {
 
@@ -26,8 +25,8 @@ class MerchantApi extends ApiRequestBase {
 	 * Will return only Orders for the merchant authenticating the request
 	 *
 	 * @param null $queryString
-	 * @param      ids   Merchant IDs
-	 * @param      names Merchant names
+	 * @param      $ids   Merchant IDs
+	 * @param      $names Merchant names
 	 *
 	 * @return mixed
 	 * @throws \Exception
@@ -50,7 +49,7 @@ class MerchantApi extends ApiRequestBase {
 		}
 		else
 		{
-			$merchants = $this->jsonMapper->mapArray($merchantJson, [], 'Fulfillment\OMS\Models\Response\Merchant');
+			$merchants = $this->jsonMapper->mapArray($merchantJson, [], get_class($this->container->get(Merchant::class)));
 		}
 
 		return $merchants;
@@ -65,7 +64,7 @@ class MerchantApi extends ApiRequestBase {
 	 * @throws \Exception
 	 * @throws \JsonMapper_Exception
 	 */
-	public function getMerchantById($merchantId, $classToMapTo = Merchant::class)
+	public function getMerchantById($merchantId)
 	{
 		$merchantJson = $this->apiClient->get('merchants/' . $merchantId);
 
@@ -75,7 +74,7 @@ class MerchantApi extends ApiRequestBase {
 		}
 		else
 		{
-			$merchant = $this->jsonMapper->map($merchantJson, new $classToMapTo());
+			$merchant = $this->jsonMapper->map($merchantJson, $this->container->get(Merchant::class));
 		}
 
 		return $merchant;
@@ -86,11 +85,11 @@ class MerchantApi extends ApiRequestBase {
 	 *
 	 * @param $merchantId
 	 *
+	 * @param $page
+	 *
 	 * @return mixed|object
-	 * @throws \Exception
-	 * @throws \JsonMapper_Exception
 	 */
-	public function getMerchantAuditsById($merchantId, $page, $classToMapTo = MerchantBalanceAudit::class)
+	public function getMerchantAuditsById($merchantId, $page)
 	{
 		$merchantAuditJson = $this->apiClient->get('merchants/' . $merchantId . '/audits' . '/balance', ['page' => $page]);
 
@@ -100,7 +99,7 @@ class MerchantApi extends ApiRequestBase {
 		}
 		else
 		{
-			$returnMerchantBalanceAudit = $this->jsonMapper->map($merchantAuditJson, new $classToMapTo());
+			$returnMerchantBalanceAudit = $this->jsonMapper->mapArray($merchantAuditJson, [], get_class($this->container->get(MerchantBalanceAudit::class)));
 		}
 
 		return $returnMerchantBalanceAudit;
@@ -112,11 +111,11 @@ class MerchantApi extends ApiRequestBase {
 	 *
 	 * @param $merchantId
 	 *
-	 * @return mixed|object
-	 * @throws \Exception
-	 * @throws \JsonMapper_Exception
+	 * @param $page
+	 *
+	 * @return mixed|OrderAccountingAudit[]
 	 */
-	public function getOrderAccountingAuditById($merchantId, $page, $classToMapTo = OrderAccountingAudit::class)
+	public function getOrderAccountingAuditById($merchantId, $page)
 	{
 		$merchantAuditJson = $this->apiClient->get('merchants/' . $merchantId . '/audits' . '/orders', ['page' => $page]);
 
@@ -126,7 +125,7 @@ class MerchantApi extends ApiRequestBase {
 		}
 		else
 		{
-			$returnMerchantOrderAudit = $this->jsonMapper->map($merchantAuditJson, new $classToMapTo());
+			$returnMerchantOrderAudit = $this->jsonMapper->mapArray($merchantAuditJson, [], get_class($this->container->get(OrderAccountingAudit::class)));
 		}
 
 		return $returnMerchantOrderAudit;
@@ -138,21 +137,21 @@ class MerchantApi extends ApiRequestBase {
 	 *
 	 * @param $merchantId
 	 *
-	 * @return object | Merchant
+	 * @return array | Inventory[]
 	 * @throws \Exception
 	 * @throws \JsonMapper_Exception
 	 */
-	public function getInventoryByMerchantId($merchantId, $classToMapTo = Merchant::class)
+	public function getInventoryByMerchantId($merchantId)
 	{
-		$merchantJson = $this->apiClient->get('merchants/' . $merchantId . '/inventory');
+		$inventoryJson = $this->apiClient->get('merchants/' . $merchantId . '/inventory');
 
 		if ($this->jsonOnly)
 		{
-			$inventory = $merchantJson;
+			$inventory = $inventoryJson;
 		}
 		else
 		{
-			$inventory = $this->jsonMapper->map($merchantJson, new $classToMapTo());
+			$inventory = $this->jsonMapper->mapArray($inventoryJson, [], get_class($this->container->get(Inventory::class)));
 		}
 
 		return $inventory;
@@ -163,11 +162,11 @@ class MerchantApi extends ApiRequestBase {
 	 *
 	 * @param $merchantId
 	 *
-	 * @return object | MerchantShippingMethod
+	 * @return array | MerchantShippingMethod[]
 	 * @throws \Exception
 	 * @throws \JsonMapper_Exception
 	 */
-	public function getShippingMethodsById($merchantId, $classToMapTo = MerchantShippingMethod::class)
+	public function getShippingMethodsById($merchantId)
 	{
 		$merchantShippingMethodJson = $this->apiClient->get('merchants/' . $merchantId . '/methods');
 
@@ -177,7 +176,7 @@ class MerchantApi extends ApiRequestBase {
 		}
 		else
 		{
-			$methods = $this->jsonMapper->map($merchantShippingMethodJson, new $classToMapTo());
+			$methods = $this->jsonMapper->mapArray($merchantShippingMethodJson, [], get_class($this->container->get(MerchantShippingMethod::class)));
 		}
 
 		return $methods;
@@ -188,11 +187,11 @@ class MerchantApi extends ApiRequestBase {
 	 *
 	 * @param $merchantId
 	 *
-	 * @return object | Product
+	 * @return array | Product[]
 	 * @throws \Exception
 	 * @throws \JsonMapper_Exception
 	 */
-	public function getProductsById($merchantId, $classToMapTo = Product::class)
+	public function getProductsById($merchantId)
 	{
 		$merchantJson = $this->apiClient->get('merchants/' . $merchantId . '/products');
 
@@ -202,7 +201,7 @@ class MerchantApi extends ApiRequestBase {
 		}
 		else
 		{
-			$products = $this->jsonMapper->map($merchantJson, new $classToMapTo());
+			$products = $this->jsonMapper->mapArray($merchantJson, [], get_class($this->container->get(Product::class)));
 		}
 
 		return $products;
@@ -213,11 +212,11 @@ class MerchantApi extends ApiRequestBase {
 	 *
 	 * @param $merchantId
 	 *
-	 * @return object | Sku
+	 * @return object | Sku[]
 	 * @throws \Exception
 	 * @throws \JsonMapper_Exception
 	 */
-	public function getSkusById($merchantId, $classToMapTo = Sku::class)
+	public function getSkusById($merchantId)
 	{
 		$merchantJson = $this->apiClient->get('merchants/' . $merchantId . '/skus');
 
@@ -227,7 +226,7 @@ class MerchantApi extends ApiRequestBase {
 		}
 		else
 		{
-			$skus = $this->jsonMapper->map($merchantJson, new $classToMapTo());
+			$skus = $this->jsonMapper->mapArray($merchantJson, get_class($this->container->get(Sku::class)));
 		}
 
 		return $skus;
@@ -238,23 +237,23 @@ class MerchantApi extends ApiRequestBase {
 	 *
 	 * @param $merchantId
 	 *
-	 * @return object | Sku
+	 * @return object | User[]
 	 * @throws \Exception
 	 * @throws \JsonMapper_Exception
 	 */
-	public function getUsersById($merchantId, $classToMapTo = User::class)
+	public function getUsersById($merchantId)
 	{
 		$merchantJson = $this->apiClient->get('merchants/' . $merchantId . '/users');
 
 		if ($this->jsonOnly)
 		{
-			$skus = $merchantJson;
+			$users = $merchantJson;
 		}
 		else
 		{
-			$skus = $this->jsonMapper->map($merchantJson, new $classToMapTo());
+			$users = $this->jsonMapper->mapArray($merchantJson, [], get_class($this->container->get(User::class)));
 		}
 
-		return $skus;
+		return $users;
 	}
 }
