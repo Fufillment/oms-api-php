@@ -8,16 +8,14 @@
 
 namespace Fulfillment\OMS\Api;
 
-
-use Fulfillment\OMS\Models\Response\Inventory;
-
+use Fulfillment\OMS\Models\Response\Contracts\Inventory;
 
 class InventoryApi extends ApiRequestBase
 {
     /**
      * Return an array of Inventory associated with the authenticating merchant
      *
-     * @return mixed
+     * @return array|Inventory[]
      * @throws \Exception
      */
     public function listInventory()
@@ -26,7 +24,7 @@ class InventoryApi extends ApiRequestBase
         if($this->jsonOnly){
             $inventory = $json;
         } else {
-            $inventory = $this->jsonMapper->mapArray($json, [], 'Fulfillment\OMS\Models\Response\Inventory');
+            $inventory = $this->jsonMapper->mapArray($json, [], get_class($this->container->get(Inventory::class)));
         }
         return $inventory;
     }
@@ -35,17 +33,17 @@ class InventoryApi extends ApiRequestBase
      * Return the Inventory with the specified Id
      *
      * @param $inventoryId
-     * @return mixed|object
+     * @return mixed|Inventory
      * @throws \Exception
      * @throws \JsonMapper_Exception
      */
-	public function getInventory($inventoryId, $classToMapTo = Inventory::class)
+	public function getInventory($inventoryId)
 	{
         $json = $this->apiClient->get('inventory/' . $inventoryId);
         if($this->jsonOnly){
             $inventory = $json;
         } else {
-	        $inventory = $this->jsonMapper->map($json, new $classToMapTo());
+	        $inventory = $this->jsonMapper->map($json, $this->container->get(Inventory::class));
         }
         return $inventory;
     }
@@ -59,6 +57,7 @@ class InventoryApi extends ApiRequestBase
 	 * @throws \Exception
 	 * @throws \JsonMapper_Exception
 	 */
+	// TODO build InventoryAudit model
 	public function getInventoryAuditsById($inventoryId, $page, $limit, $classToMapTo = Inventory::class)
 	{
 		$inventoryAuditJson = $this->apiClient->get('inventory/' . $inventoryId . '/audits', ['page' => $page, 'limit' => $limit]);
