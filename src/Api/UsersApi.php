@@ -7,9 +7,8 @@
  */
 
 namespace Fulfillment\OMS\Api;
+use Fulfillment\OMS\Models\Request\Contracts\User;
 
-
-use Fulfillment\OMS\Models\Response\User;
 
 /**
  * Class UsersApi
@@ -23,7 +22,7 @@ class UsersApi extends ApiRequestBase
      * Will only returns users from the merchant authorizing the request
      *
      * @param $queryString
-     * @return mixed
+     * @return array|User[]
      * @throws \Exception
      */
     public function getUsers($queryString)
@@ -33,7 +32,7 @@ class UsersApi extends ApiRequestBase
         if ($this->jsonOnly) {
             $users = $json;
         } else {
-            $users = $this->jsonMapper->mapArray($json, [], 'Fulfillment\OMS\Models\Response\Contracts\User');
+            $users = $this->jsonMapper->mapArray($json, [], get_class($this->container->get(User::class)));
         }
         return $users;
     }
@@ -42,18 +41,18 @@ class UsersApi extends ApiRequestBase
      * Get a user with the specified Id
      *
      * @param $userId
-     * @return mixed|object
+     * @return array|User
      * @throws \Exception
      * @throws \JsonMapper_Exception
      */
-    public function getUser($userId, $classToMapTo = User::class)
+    public function getUser($userId)
     {
         $json = $this->apiClient->get('users/' . $userId);
 
         if ($this->jsonOnly) {
             $user = $json;
         } else {
-            $user = $this->jsonMapper->map($json, new $classToMapTo());
+            $user = $this->jsonMapper->map($json, $this->container->get(User::class));
         }
 
         return $user;
@@ -62,8 +61,8 @@ class UsersApi extends ApiRequestBase
     /**
      * Create a new user in the Fulfillment system
      *
-     * @param $user
-     * @return mixed|object
+     * @param array|\Fulfillment\OMS\Models\Request\User $user
+     * @return array|User
      * @throws \Exception
      * @throws \Fulfillment\OMS\Exceptions\ValidationFailureException
      * @throws \JsonMapper_Exception
@@ -78,7 +77,7 @@ class UsersApi extends ApiRequestBase
         if ($this->jsonOnly) {
             $returnUser = $json;
         } else {
-            $returnUser = $this->jsonMapper->map($json, new User());
+            $returnUser = $this->jsonMapper->map($json, $this->container->get(User::class));
         }
         return $returnUser;
     }
@@ -87,7 +86,7 @@ class UsersApi extends ApiRequestBase
      * Update an existing user
      *
      * @param $userId
-     * @param $user
+     * @param array|\Fulfillment\OMS\Models\Request\User $user
      * @throws \Exception
      * @throws \Fulfillment\OMS\Exceptions\ValidationFailureException
      */
