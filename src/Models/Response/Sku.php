@@ -8,7 +8,6 @@
 
 namespace Fulfillment\OMS\Models\Response;
 
-use Fulfillment\OMS\Models\Response\Contracts\Product;
 use Fulfillment\OMS\Models\Response\Contracts\Sku as ResponseSkuContract;
 
 

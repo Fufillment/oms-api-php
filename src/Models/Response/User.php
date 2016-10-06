@@ -13,6 +13,7 @@ use Fulfillment\OMS\Models\Request\User as RequestUser;
 use Fulfillment\OMS\Models\Response\Contracts\ContactInfo;
 use Fulfillment\OMS\Models\Response\Contracts\User as ResponseUserContract;
 use Fulfillment\OMS\Models\ValidatableBase;
+use Fulfillment\OMS\Models\Validation\Traits\OrderValidation;
 use Fulfillment\OMS\Models\Validation\Traits\UserValidation;
 
 class User extends RequestUser implements ResponseUserContract
