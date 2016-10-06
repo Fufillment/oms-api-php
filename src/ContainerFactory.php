@@ -4,6 +4,7 @@
 namespace Fulfillment\OMS;
 
 
+use Fulfillment\OMS\Models\Response\SkuProduct;
 use Fulfillment\OMS\Models\Response\TrackingInfo;
 use Fulfillment\OMS\Models\Response\OrderStatus;
 use Fulfillment\OMS\Models\Response\Inventory;
@@ -25,6 +26,7 @@ class ContainerFactory {
 		\Fulfillment\OMS\Models\Response\Contracts\Sku::class          => Sku::class,
 		\Fulfillment\OMS\Models\Response\Contracts\OrderStatus::class  => OrderStatus::class,
 		\Fulfillment\OMS\Models\Response\Contracts\TrackingInfo::class => TrackingInfo::class,
+	    \Fulfillment\OMS\Models\Response\Contracts\SkuProduct::class => SkuProduct::class
 	];
 
 	protected $interfaces = [
@@ -35,6 +37,8 @@ class ContainerFactory {
 		\Fulfillment\OMS\Models\Response\Contracts\Product::class,
 		\Fulfillment\OMS\Models\Response\Contracts\Sku::class,
 		\Fulfillment\OMS\Models\Response\Contracts\OrderStatus::class,
+	    \Fulfillment\OMS\Models\Response\Contracts\TrackingInfo::class,
+	    \Fulfillment\OMS\Models\Response\Contracts\SkuProduct::class
 	];
 
 	/**
