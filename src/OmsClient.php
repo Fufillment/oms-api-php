@@ -8,25 +8,21 @@
 
 namespace Fulfillment\OMS;
 require __DIR__ . '/../vendor/autoload.php';
-
-
 use Dotenv;
 use Fulfillment\Api\Api;
 use Fulfillment\Api\Configuration\ApiConfiguration;
 use Fulfillment\OMS\Api\ApiRequestBase;
 use Fulfillment\OMS\Api\InventoryApi;
+use Fulfillment\OMS\Api\MerchantApi;
 use Fulfillment\OMS\Api\OrdersApi;
 use Fulfillment\OMS\Api\UsersApi;
 use Fulfillment\OMS\Utilities\ArrayUtil;
 use League\CLImate\CLImate;
 use GuzzleHttp;
-
 date_default_timezone_set('Europe/London');
-
 class OmsClient
 {
     public $orders;
-
     /**
      *
      * @param $config mixed Must be either an absolute string pointing to a directory with a .env file or an array containing configuration information
@@ -36,7 +32,6 @@ class OmsClient
     {
         $this->climate = new CLImate;
         //defined('STDOUT');
-
         //parse config
         if (is_string($config) || is_null($config)) {
             if (!is_null($config)) {
@@ -45,7 +40,6 @@ class OmsClient
                 }
                 Dotenv::load($config);
                 Dotenv::required(['API_ENDPOINT']);
-
             }
             $username           = getenv('USERNAME') ?: null;
             $password           = getenv('PASSWORD') ?: null;
@@ -71,23 +65,24 @@ class OmsClient
                 throw new \InvalidArgumentException('A configuration must be provided');
             }
         }
-
         $apiConfig = new ApiConfiguration([
-                                              'username'           => $username,
-                                              'password'           => $password,
-                                              'clientId'           => $clientId,
-                                              'clientSecret'       => $clientSecret,
-                                              'accessToken'        => $accessToken,
-                                              'endpoint'           => $endpoint,
-                                              'authEndpoint'       => $authEndpoint,
-                                              'storageTokenPrefix' => $storageTokenPrefix,
-                                              'scope'              => 'oms'
-                                          ]);
-
+            'username'           => $username,
+            'password'           => $password,
+            'clientId'           => $clientId,
+            'clientSecret'       => $clientSecret,
+            'accessToken'        => $accessToken,
+            'endpoint'           => $endpoint,
+            'authEndpoint'       => $authEndpoint,
+            'storageTokenPrefix' => $storageTokenPrefix,
+            'scope'              => 'oms',
+        ]);
         $apiClient = new Api($apiConfig);
         //instantiate api
         $this->orders    = new OrdersApi($apiClient);
         $this->inventory = new InventoryApi($apiClient);
         $this->users     = new UsersApi($apiClient);
+        $this->merchants = new MerchantApi($apiClient);
+        $this->skus      = new SkusApi($apiClient);
+        $this->audits    = new AuditsApi($apiClient);
     }
 }

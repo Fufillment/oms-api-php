@@ -15,7 +15,7 @@
   ],
   "require": {
     "guzzlehttp/guzzle": "~6.0",
-    "respect/validation": "0.9.3",
+    "respect/validation": "^1.1",
     "vlucas/phpdotenv": "~1.0",
     "league/climate": "^3.2",
     "netresearch/jsonmapper": "^0.8.0",

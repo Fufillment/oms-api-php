@@ -8,8 +8,10 @@
 
 namespace Fulfillment\OMS\Models\Response;
 
+use Fulfillment\OMS\Models\Response\Contracts\OrderStatus as ResponseOrderStatusContract;
 
-class OrderStatus
+
+class OrderStatus implements ResponseOrderStatusContract
 {
     /**
      * @var \DateTime
@@ -19,4 +21,37 @@ class OrderStatus
      * @var Status
      */
     public $status;
+
+    /**
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param \DateTime $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    }
+
+    /**
+     * @return Status
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param Status $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
 }

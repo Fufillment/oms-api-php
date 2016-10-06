@@ -11,6 +11,10 @@ namespace Fulfillment\OMS\Api;
 
 use Fulfillment\OMS\Models\Response\User;
 
+/**
+ * Class UsersApi
+ * @package Fulfillment\OMS\Api
+ */
 class UsersApi extends ApiRequestBase
 {
     /**
@@ -29,7 +33,7 @@ class UsersApi extends ApiRequestBase
         if ($this->jsonOnly) {
             $users = $json;
         } else {
-            $users = $this->jsonMapper->mapArray($json, [], 'Fulfillment\OMS\Models\Response\User');
+            $users = $this->jsonMapper->mapArray($json, [], 'Fulfillment\OMS\Models\Response\Contracts\User');
         }
         return $users;
     }
@@ -42,14 +46,14 @@ class UsersApi extends ApiRequestBase
      * @throws \Exception
      * @throws \JsonMapper_Exception
      */
-    public function getUser($userId)
+    public function getUser($userId, $classToMapTo = User::class)
     {
         $json = $this->apiClient->get('users/' . $userId);
 
         if ($this->jsonOnly) {
             $user = $json;
         } else {
-            $user = $this->jsonMapper->map($json, new User());
+            $user = $this->jsonMapper->map($json, new $classToMapTo());
         }
 
         return $user;

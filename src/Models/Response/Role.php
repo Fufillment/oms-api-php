@@ -8,8 +8,9 @@
 
 namespace Fulfillment\OMS\Models\Response;
 
+use Fulfillment\OMS\Models\Response\Contracts\Role as ResponseRoleContract;
 
-class Role
+class Role implements ResponseRoleContract
 {
     /**
      * @var int
@@ -19,8 +20,41 @@ class Role
      * @var string
      */
     public $name;
+
+
     /**
-     * @var string
+     * @return int
      */
-    public $description;
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+
+
+
 }

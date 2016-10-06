@@ -11,6 +11,9 @@ namespace Fulfillment\OMS\Api;
 use Fulfillment\OMS\Models\Request\OrderSku;
 use Fulfillment\OMS\Models\Request\Recipient;
 use Fulfillment\OMS\Models\Response\Order;
+use Fulfillment\OMS\Models\Response\Status;
+use Fulfillment\OMS\Models\Response\TrackingInfo;
+use phpDocumentor\Reflection\Types\Object_;
 
 class OrdersApi extends ApiRequestBase
 {
@@ -48,19 +51,19 @@ class OrdersApi extends ApiRequestBase
     /**
      * Return the Order with the specified Id
      *
-     * @param $orderId
+     * @param int                                              $orderId      Id of order to retrieve
+     * @param \Fulfillment\OMS\Models\Response\Contracts\Order $classToMapTo A class implementing the Response Order Contract to map the json into
+     *
      * @return object
-     * @throws \Exception
-     * @throws \JsonMapper_Exception
      */
-    public function getOrder($orderId)
+    public function getOrder($orderId, $classToMapTo = Order::class)
     {
         $orderJson = $this->apiClient->get('orders/' . $orderId);
 
         if ($this->jsonOnly) {
             $order = $orderJson;
         } else {
-            $order = $this->jsonMapper->map($orderJson, new Order());
+            $order = $this->jsonMapper->map($orderJson, new $classToMapTo());
         }
 
         return $order;
@@ -75,7 +78,7 @@ class OrdersApi extends ApiRequestBase
      * @throws \Fulfillment\OMS\Exceptions\ValidationFailureException
      * @throws \JsonMapper_Exception
      */
-    public function createOrder($order)
+    public function createOrder($order, $classToMapTo = Order::class)
     {
         if ($order instanceof \Fulfillment\OMS\Models\Request\Order && $this->validateRequests) {
             $order->validate();
@@ -86,7 +89,7 @@ class OrdersApi extends ApiRequestBase
         if ($this->jsonOnly) {
             $returnOrder = $orderJson;
         } else {
-            $returnOrder = $this->jsonMapper->map($orderJson, new Order());
+            $returnOrder = $this->jsonMapper->map($orderJson, new $classToMapTo());
         }
 
         return $returnOrder;
@@ -167,6 +170,59 @@ class OrdersApi extends ApiRequestBase
     {
         $this->apiClient->delete('orders/' . $orderId . '/skus/', $orderSkuId);
     }
+
+    /**
+     * Get a history of statuses for an order
+     *
+     * @return Mixed | Object
+     *
+     * @param $orderId
+     * returns
+     *
+     * @throws \Exception
+     */
+    public function getStatusHistory($orderId, $classToMapTo = Status::class)
+    {
+        $statusJson = $this->apiClient->get('orders/' . $orderId . '/statusHistory');
+
+        if ($this->jsonOnly)
+        {
+            $status = $statusJson;
+        }
+        else
+        {
+            $status = $this->jsonMapper->map($statusJson, new $classToMapTo());
+        }
+
+        return $status;
+    }
+
+
+    /**
+     * Get the tracking information for an order
+     *
+     * @return Mixed|Object
+     *
+     * @param $orderId
+     *
+     * @throws \Exception
+     */
+    public function getTracking($orderId, $classToMapTo = TrackingInfo::class)
+    {
+        $trackingJson = $this->apiClient->get('orders/' . $orderId . '/tracking');
+
+        if ($this->jsonOnly)
+        {
+            $tracking = $trackingJson;
+        }
+        else
+        {
+            $tracking = $this->jsonMapper->map($trackingJson, new $classToMapTo());
+        }
+
+        return $tracking;
+    }
+
 
 
 }

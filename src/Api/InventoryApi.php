@@ -11,6 +11,7 @@ namespace Fulfillment\OMS\Api;
 
 use Fulfillment\OMS\Models\Response\Inventory;
 
+
 class InventoryApi extends ApiRequestBase
 {
     /**
@@ -38,13 +39,40 @@ class InventoryApi extends ApiRequestBase
      * @throws \Exception
      * @throws \JsonMapper_Exception
      */
-    public function getInventory($inventoryId){
+	public function getInventory($inventoryId, $classToMapTo = Inventory::class)
+	{
         $json = $this->apiClient->get('inventory/' . $inventoryId);
         if($this->jsonOnly){
             $inventory = $json;
         } else {
-            $inventory = $this->jsonMapper->map($json, new Inventory());
+	        $inventory = $this->jsonMapper->map($json, new $classToMapTo());
         }
         return $inventory;
     }
+
+	/**
+	 * Get inventory level audits
+	 *
+	 * @param $inventoryId
+	 *
+	 * @return mixed|object
+	 * @throws \Exception
+	 * @throws \JsonMapper_Exception
+	 */
+	public function getInventoryAuditsById($inventoryId, $page, $limit, $classToMapTo = Inventory::class)
+	{
+		$inventoryAuditJson = $this->apiClient->get('inventory/' . $inventoryId . '/audits', ['page' => $page, 'limit' => $limit]);
+
+		if ($this->jsonOnly)
+		{
+			$returnInventoryAudit = $inventoryAuditJson;
+		}
+		else
+		{
+			$returnInventoryAudit = $this->jsonMapper->map($inventoryAuditJson, new $classToMapTo());
+		}
+
+		return $returnInventoryAudit;
+
+	}
 }
