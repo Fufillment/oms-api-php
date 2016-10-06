@@ -9,14 +9,14 @@
 namespace Fulfillment\OMS\Api;
 
 use Fulfillment\OMS\Models\Response\Contracts\Sku;
-use Fulfillment\OMS\Models\Response\SkuProduct;
+use Fulfillment\OMS\Models\Response\Contracts\SkuProduct;
 
 class SkusApi extends ApiRequestBase {
 	/**
 	 * @param      $skuIds
 	 * @param null $queryString
 	 *
-	 * @return mixed
+	 * @return array|Sku[]
 	 */
 	public function getSkus($skuIds, $queryString = null)
 	{
@@ -34,7 +34,7 @@ class SkusApi extends ApiRequestBase {
 		}
 		else
 		{
-			$skus = $this->jsonMapper->mapArray($skusJson, [], 'Fulfillment\OMS\Models\Response\Sku');
+			$skus = $this->jsonMapper->mapArray($skusJson, [], get_class($this->container->get(Sku::class)));
 		}
 
 		return $skus;
@@ -42,12 +42,11 @@ class SkusApi extends ApiRequestBase {
 
 	/**
 	 * @param $skuId
-	 * @param $classToMapTo
 	 *
-	 * @return mixed|object
+	 * @return array|Sku
 	 * @throws \JsonMapper_Exception
 	 */
-	public function getSkuById($skuId, $classToMapTo = Sku::class)
+	public function getSkuById($skuId)
 	{
 		$skuJson = $this->apiClient->get('skus/' . $skuId);
 
@@ -57,7 +56,7 @@ class SkusApi extends ApiRequestBase {
 		}
 		else
 		{
-			$skus = $this->jsonMapper->map($skuJson, new $classToMapTo());
+			$skus = $this->jsonMapper->map($skuJson, $this->container->get(Sku::class));
 		}
 
 		return $skus;
@@ -65,11 +64,10 @@ class SkusApi extends ApiRequestBase {
 
 	/**
 	 * @param $skuId
-	 * @param $classToMapTo
 	 *
-	 * @return mixed
+	 * @return array|SkuProduct[]
 	 */
-	public function getSkuProductsBySkuId($skuId, $classToMapTo = SkuProduct::class)
+	public function getSkuProductsBySkuId($skuId)
 	{
 		$skuProductsJson = $this->apiClient->get('skus/' . $skuId . '/products');
 
@@ -79,7 +77,7 @@ class SkusApi extends ApiRequestBase {
 		}
 		else
 		{
-			$skuProducts = $this->jsonMapper->mapArray($skuProductsJson, [], new $classToMapTo());
+			$skuProducts = $this->jsonMapper->mapArray($skuProductsJson, [], get_class($this->container->get(SkuProduct::class)));
 		}
 
 		return $skuProducts;
