@@ -4,6 +4,8 @@
 namespace Fulfillment\OMS;
 
 
+use Fulfillment\OMS\Models\Response\TrackingInfo;
+use Fulfillment\OMS\Models\Response\OrderStatus;
 use Fulfillment\OMS\Models\Response\Inventory;
 use Fulfillment\OMS\Models\Response\Merchant;
 use Fulfillment\OMS\Models\Response\Order;
@@ -15,12 +17,14 @@ use League\Container\Container;
 class ContainerFactory {
 
 	protected $defaultClasses = [
-		\Fulfillment\OMS\Models\Response\Contracts\Order::class     => Order::class,
-		\Fulfillment\OMS\Models\Response\Contracts\User::class      => User::class,
-		\Fulfillment\OMS\Models\Response\Contracts\Inventory::class => Inventory::class,
-		\Fulfillment\OMS\Models\Response\Contracts\Merchant::class  => Merchant::class,
-		\Fulfillment\OMS\Models\Response\Contracts\Product::class   => Product::class,
-		\Fulfillment\OMS\Models\Response\Contracts\Sku::class       => Sku::class,
+		\Fulfillment\OMS\Models\Response\Contracts\Order::class        => Order::class,
+		\Fulfillment\OMS\Models\Response\Contracts\User::class         => User::class,
+		\Fulfillment\OMS\Models\Response\Contracts\Inventory::class    => Inventory::class,
+		\Fulfillment\OMS\Models\Response\Contracts\Merchant::class     => Merchant::class,
+		\Fulfillment\OMS\Models\Response\Contracts\Product::class      => Product::class,
+		\Fulfillment\OMS\Models\Response\Contracts\Sku::class          => Sku::class,
+		\Fulfillment\OMS\Models\Response\Contracts\OrderStatus::class  => OrderStatus::class,
+		\Fulfillment\OMS\Models\Response\Contracts\TrackingInfo::class => TrackingInfo::class,
 	];
 
 	protected $interfaces = [
@@ -30,6 +34,7 @@ class ContainerFactory {
 		\Fulfillment\OMS\Models\Response\Contracts\Merchant::class,
 		\Fulfillment\OMS\Models\Response\Contracts\Product::class,
 		\Fulfillment\OMS\Models\Response\Contracts\Sku::class,
+		\Fulfillment\OMS\Models\Response\Contracts\OrderStatus::class,
 	];
 
 	/**
@@ -42,16 +47,10 @@ class ContainerFactory {
 	{
 		$container = new Container;
 
-		foreach($this->interfaces as $interface) {
+		foreach ($this->interfaces as $interface)
+		{
 			$container->add($interface, $this->getConcreteClass($interface, $data));
 		}
-
-/*		$container->add('order', $this->getConcreteClass('order', $data));
-		$container->add('user', $this->getConcreteClass('user', $data));
-		$container->add('inventory', $this->getConcreteClass('inventory', $data));
-		$container->add('merchant', $this->getConcreteClass('merchant', $data));
-		$container->add('product', $this->getConcreteClass('product', $data));
-		$container->add('sku', $this->getConcreteClass('sku', $data));*/
 
 		return $container;
 	}
