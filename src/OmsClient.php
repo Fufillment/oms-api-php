@@ -12,23 +12,54 @@ use Dotenv;
 use Fulfillment\Api\Api;
 use Fulfillment\Api\Configuration\ApiConfiguration;
 use Fulfillment\OMS\Api\ApiRequestBase;
+use Fulfillment\OMS\Api\AuditsApi;
 use Fulfillment\OMS\Api\InventoryApi;
 use Fulfillment\OMS\Api\MerchantApi;
 use Fulfillment\OMS\Api\OrdersApi;
+use Fulfillment\OMS\Api\SkusApi;
 use Fulfillment\OMS\Api\UsersApi;
 use Fulfillment\OMS\Utilities\ArrayUtil;
 use League\CLImate\CLImate;
 use GuzzleHttp;
+use League\Container\Container;
+
 date_default_timezone_set('Europe/London');
 class OmsClient
 {
-    public $orders;
-    /**
-     *
-     * @param $config mixed Must be either an absolute string pointing to a directory with a .env file or an array containing configuration information
-     * @throws \Exception Thrown if a configuration is not valid
-     */
-    public function __construct($config)
+	/** @var Api */
+    protected $apiClient;
+
+	/** @var Container */
+	protected $container;
+
+	/** @var OrdersApi */
+	public $orders;
+
+	/** @var InventoryApi */
+	public $inventory;
+
+	/** @var UsersApi */
+	public $users;
+
+	/** @var MerchantApi */
+	public $merchants;
+
+	/** @var SkusApi */
+	public $skus;
+
+	/** @var AuditsApi */
+	public $audits;
+
+	protected $jsonOnly;
+
+	/**
+	 *
+	 * @param      $config mixed Must be either an absolute string pointing to a directory with a .env file or an array containing configuration information
+	 * @param null $providedClasses
+	 *
+	 * @throws \Exception Thrown if a configuration is not valid
+	 */
+    public function __construct($config, $providedClasses = null)
     {
         $this->climate = new CLImate;
         //defined('STDOUT');
@@ -48,7 +79,7 @@ class OmsClient
             $accessToken        = getenv('ACCESS_TOKEN') ?: null;
             $endpoint           = getenv('API_ENDPOINT') ?: null;
             $authEndpoint       = getenv('AUTH_ENDPOINT') ?: null;
-            $jsonOnly           = getenv('JSON_ONLY') ?: null;
+            $this->jsonOnly           = getenv('JSON_ONLY') ?: null;
             $storageTokenPrefix = getenv('STORAGE_TOKEN_PREFIX') ?: null;
         } else {
             if (is_array($config)) {
@@ -60,7 +91,7 @@ class OmsClient
                 $endpoint           = ArrayUtil::get($config['endpoint']);
                 $authEndpoint       = ArrayUtil::get($config['authEndpoint']);
                 $storageTokenPrefix = ArrayUtil::get($config['storageTokenPrefix']);
-                $jsonOnly           = ArrayUtil::get($config['jsonOnly'], false);
+                $this->jsonOnly           = ArrayUtil::get($config['jsonOnly'], false);
             } else {
                 throw new \InvalidArgumentException('A configuration must be provided');
             }
@@ -76,13 +107,38 @@ class OmsClient
             'storageTokenPrefix' => $storageTokenPrefix,
             'scope'              => 'oms',
         ]);
-        $apiClient = new Api($apiConfig);
-        //instantiate api
-        $this->orders    = new OrdersApi($apiClient);
-        $this->inventory = new InventoryApi($apiClient);
-        $this->users     = new UsersApi($apiClient);
-        $this->merchants = new MerchantApi($apiClient);
-        $this->skus      = new SkusApi($apiClient);
-        $this->audits    = new AuditsApi($apiClient);
+
+	    // Dependency injection
+	    $factory = new ContainerFactory;
+	    $this->container = $factory->createContainer($providedClasses);
+
+        $this->apiClient = new Api($apiConfig);
+
+        //instantiate api endpoints
+        $this->setEndPoints();
     }
+
+	/**
+	 * Registers a concrete class against an interface
+	 *
+	 * @param string $interfaceFqn FQN for interface to register
+	 * @param string $concreteFqn  FQN for concrete class to use as implementation
+	 *
+	 * @throws \InvalidArgumentException
+	 */
+	public function registerConcreteClass($interfaceFqn, $concreteFqn) {
+
+		ContainerFactory::checkImplements($concreteFqn, $interfaceFqn);
+		$this->container->add($interfaceFqn, $concreteFqn);
+		$this->setEndPoints();
+	}
+
+	protected function setEndPoints() {
+		$this->orders    = new OrdersApi($this->container, $this->apiClient, $this->jsonOnly);
+		$this->inventory = new InventoryApi($this->container, $this->apiClient, $this->jsonOnly);
+		$this->users     = new UsersApi($this->container, $this->apiClient, $this->jsonOnly);
+		$this->merchants = new MerchantApi($this->container, $this->apiClient, $this->jsonOnly);
+		$this->skus      = new SkusApi($this->container, $this->apiClient, $this->jsonOnly);
+		$this->audits    = new AuditsApi($this->container, $this->apiClient, $this->jsonOnly);
+	}
 }
