@@ -30,9 +30,8 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	 */
 	public function testGetOrders()
 	{
-
 		$queryString = array(
-			'id' => '9595088'
+			'limit' => '5',
 		);
 		$orders = $this->oms->orders->getOrders('2016-10-3', '2016-10-4', $queryString);
 	}
@@ -41,7 +40,12 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	 */
 	public function testGetOrder()
 	{
-		$order = $this->oms->orders->getOrder(9595088);
+		$queryString = [
+			'limit' => '5',
+		];
+		$orders      = $this->oms->orders->getOrders('2016-10-3', '2016-10-4', $queryString);
+		$orderId     = $orders[0]->id;
+		$order       = $this->oms->orders->getOrder($orderId);
 	}
 
 	/**
@@ -49,7 +53,12 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	 */
 	public function testGetStatusHistory()
 	{
-		$order = $this->oms->orders->getStatusHistory(9595088);
+		$queryString = [
+			'limit' => '5',
+		];
+		$orders      = $this->oms->orders->getOrders('2016-10-3', '2016-10-4', $queryString);
+		$orderId     = $orders[0]->id;
+		$order       = $this->oms->orders->getStatusHistory($orderId);
 	}
 
 	/**
@@ -59,7 +68,13 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	{
 		$this->markTestSkipped( 'PHPUnit will skip this test method' );
 
-		$order = $this->oms->orders->getTracking(9645831);
+		$queryString = [
+			'limit' => '5',
+		];
+		$orders      = $this->oms->orders->getOrders('2016-10-3', '2016-10-4', $queryString);
+		$orderId     = $orders[0]->id;
+
+		$order = $this->oms->orders->getTracking($orderId);
 	}
 
 	/**
@@ -80,7 +95,6 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	public function testGetUsers()
 	{
 		$queryString = array(
-			'merchantsIds' => '50001',
 			'limit' => '5'
 		);
 		$users = $this->oms->users->getUsers($queryString);
@@ -91,9 +105,13 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	 */
 	public function testGetUser()
 	{
-		$this->markTestSkipped( 'This method is not yet working' );
-		$id = 1128;
-		$users = $this->oms->users->getUser($id);
+		$queryString = [
+			'limit' => '5',
+		];
+		$users       = $this->oms->users->getUsers($queryString);
+		$userId      = $users[0]->userId;
+
+		$user = $this->oms->users->getUser($userId);
 	}
 
 	/**
@@ -102,11 +120,9 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	public function testListInventory()
 	{
 		$queryString = array(
-			'ids' => '13192',
 			'limit'=> '5',
-			'page'=> '1'
 		);
-		$audit = $this->oms->inventory->listInventory($queryString);
+		$inventoryList = $this->oms->inventory->listInventory($queryString);
 	}
 
 	/**
@@ -114,8 +130,13 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	 */
 	public function testGetInventory()
 	{
-		$inventoryId = '16096';
-		$audit = $this->oms->inventory->getInventory($inventoryId);
+		$queryString = array(
+			'limit' => '5',
+		);
+		$inventoryList = $this->oms->inventory->listInventory($queryString);
+		$inventoryId = $inventoryList[0]->id;
+
+		$inventory = $this->oms->inventory->getInventory($inventoryId);
 	}
 
 	/**
@@ -137,21 +158,24 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	 */
 	public function testGetMerchants()
 	{
-		$ids = '16096';
 		$queryString = array(
 			'limit' => 5,
-			'page' => 1
 		);
-		$audit = $this->oms->merchants->getMerchants($ids, $queryString);
+		$merchants   = $this->oms->merchants->getMerchants($queryString);
 	}
+
 	/**
 	 * Merchants getMerchantsById
 	 */
 	public function testGetMerchantById()
 	{
-		$id = '50001';
+		$queryString = array(
+			'limit' => 5,
+		);
+		$merchants   = $this->oms->merchants->getMerchants($queryString);
+		$merchantId  = $merchants[0]->id;
 
-		$audit = $this->oms->merchants->getMerchantById($id);
+		$merchant = $this->oms->merchants->getMerchantById($merchantId);
 	}
 
 	/**
@@ -160,7 +184,6 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	public function testGetMerchantAuditsById()
 	{
 		$this->markTestSkipped( 'There is not a recordedOn query endpoint yet.' );
-
 
 		$id = '50001';
 		$page = 1;
@@ -186,9 +209,14 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	 */
 	public function testGetInventoryByMerchantId()
 	{
-		$id = '50001';
 
-		$audit = $this->oms->merchants->getInventoryByMerchantId($id);
+		$queryString = array(
+			'limit' => 5,
+		);
+		$merchants   = $this->oms->merchants->getMerchants($queryString);
+		$merchantId  = $merchants[0]->id;
+
+		$inventory = $this->oms->merchants->getInventoryByMerchantId($merchantId);
 	}
 
 	/**
@@ -196,9 +224,13 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	 */
 	public function testGetShippingMethodsById()
 	{
-		$id = '50001';
+		$queryString = array(
+			'limit' => 5,
+		);
+		$merchants   = $this->oms->merchants->getMerchants($queryString);
+		$merchantId  = $merchants[0]->id;
 
-		$audit = $this->oms->merchants->getShippingMethodsById($id);
+		$audit = $this->oms->merchants->getShippingMethodsById($merchantId);
 	}
 
 	/**
@@ -206,9 +238,13 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	 */
 	public function testGetProductsById()
 	{
-		$id = '50001';
+		$queryString = array(
+			'limit' => 5,
+		);
+		$merchants   = $this->oms->merchants->getMerchants($queryString);
+		$merchantId  = $merchants[0]->id;
 
-		$audit = $this->oms->merchants->getProductsById($id);
+		$audit = $this->oms->merchants->getProductsById($merchantId);
 	}
 
 	/**
@@ -228,9 +264,13 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	 */
 	public function testGetUsersById()
 	{
-		$id = '50001';
+		$queryString = array(
+			'limit' => 5,
+		);
+		$merchants   = $this->oms->merchants->getMerchants($queryString);
+		$merchantId  = $merchants[0]->id;
 
-		$audit = $this->oms->merchants->getUsersById($id);
+		$audit = $this->oms->merchants->getUsersById($merchantId);
 	}
 
 	/**
@@ -238,13 +278,11 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	 */
 	public function testGetSkus()
 	{
-		$skuId       = '120569';
 		$queryString = [
 			'limit' => '1',
-			'page'  => '1',
 		];
 
-		$audit = $this->oms->skus->getSkus($skuId, $queryString);
+		$skus = $this->oms->skus->getSkus($queryString);
 	}
 
 	/**
@@ -252,8 +290,13 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	 */
 	public function testGetSkuById()
 	{
-		$skuId = '120569';
+		$queryString = [
+			'limit' => '1',
+		];
 
+		$skus = $this->oms->skus->getSkus($queryString);
+
+		$skuId = $skus[0]->id;
 
 		$audit = $this->oms->skus->getSkuById($skuId);
 	}
@@ -263,8 +306,13 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	 */
 	public function testGetSkuProductsBySkuId()
 	{
-		$skuId = '120569';
+		$queryString = [
+			'limit' => '1',
+		];
 
+		$skus = $this->oms->skus->getSkus($queryString);
+
+		$skuId = $skus[0]->id;
 
 		$audit = $this->oms->skus->getSkuProductsBySkuId($skuId);
 	}

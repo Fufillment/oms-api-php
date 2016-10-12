@@ -18,13 +18,12 @@ class SkusApi extends ApiRequestBase {
 	 *
 	 * @return array|Sku[]
 	 */
-	public function getSkus($skuIds = '', $queryString = null)
+	public function getSkus($queryString = null)
 	{
 		if (is_null($queryString))
 		{
 			$queryString = [];
 		}
-		$queryString['ids'] = $skuIds;
 
 		$skusJson = $this->apiClient->get('skus', $queryString);
 

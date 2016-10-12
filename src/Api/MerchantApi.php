@@ -31,14 +31,13 @@ class MerchantApi extends ApiRequestBase {
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	public function getMerchants($ids, $queryString = null)
+	public function getMerchants($queryString = null)
 	{
 
 		if (is_null($queryString))
 		{
 			$queryString = [];
 		}
-		$queryString['ids']   = $ids;
 
 		$merchantJson = $this->apiClient->get('merchants', $queryString);
 
