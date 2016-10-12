@@ -91,8 +91,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	 */
 	public function testGetUser()
 	{
-		$this->markTestSkipped( 'This method is not yet working' );
-		$id = 1128;
+		$id = 'me';
 		$users = $this->oms->users->getUser($id);
 	}
 
