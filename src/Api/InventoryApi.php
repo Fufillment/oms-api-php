@@ -24,7 +24,7 @@ class InventoryApi extends ApiRequestBase
         if($this->jsonOnly){
             $inventory = $json;
         } else {
-            $inventory = $this->jsonMapper->mapArray($json, [], get_class($this->container->get(Inventory::class)));
+	        $inventory = $this->jsonMapper->mapArray($json->data, [], get_class($this->container->get(Inventory::class)));
         }
         return $inventory;
     }

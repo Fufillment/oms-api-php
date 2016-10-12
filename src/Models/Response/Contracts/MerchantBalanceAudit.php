@@ -60,12 +60,12 @@ interface MerchantBalanceAudit {
 	public function setNewBalance($newBalance);
 
 	/**
-	 * @return string
+	 * @return string[]
 	 */
 	public function getRecordedOn();
 
 	/**
-	 * @param string $recordedOn
+	 * @param string[] $recordedOn
 	 */
 	public function setRecordedOn($recordedOn);
 }

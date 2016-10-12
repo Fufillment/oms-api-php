@@ -50,12 +50,12 @@ interface MerchantShippingMethod {
 	public function setMerchantMethod($merchantMethod);
 
 	/**
-	 * @return \Fulfillment\OMS\Models\Response\CarrierMethod
+	 * @return \Fulfillment\OMS\Models\Response\Contracts\CarrierMethods
 	 */
 	public function getCarrierMethod();
 
 	/**
-	 * @param \Fulfillment\OMS\Models\Response\CarrierMethod $carrierMethod
+	 * @param \Fulfillment\OMS\Models\Response\Contracts\CarrierMethod $carrierMethod
 	 */
 	public function setCarrierMethod($carrierMethod);
 }

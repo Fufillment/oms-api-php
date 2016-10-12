@@ -8,7 +8,7 @@
 
 namespace Fulfillment\OMS\Api;
 
-use Fulfillment\OMS\Models\Request\Contracts\User;
+use Fulfillment\OMS\Models\Response\Contracts\User;
 use Fulfillment\OMS\Models\Response\Contracts\Inventory;
 use Fulfillment\OMS\Models\Response\Contracts\Merchant;
 use Fulfillment\OMS\Models\Response\Contracts\MerchantBalanceAudit;
@@ -31,7 +31,7 @@ class MerchantApi extends ApiRequestBase {
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	public function getMerchants($ids, $names, $queryString = null)
+	public function getMerchants($ids, $queryString = null)
 	{
 
 		if (is_null($queryString))
@@ -39,7 +39,6 @@ class MerchantApi extends ApiRequestBase {
 			$queryString = [];
 		}
 		$queryString['ids']   = $ids;
-		$queryString['names'] = $names;
 
 		$merchantJson = $this->apiClient->get('merchants', $queryString);
 
@@ -49,7 +48,7 @@ class MerchantApi extends ApiRequestBase {
 		}
 		else
 		{
-			$merchants = $this->jsonMapper->mapArray($merchantJson, [], get_class($this->container->get(Merchant::class)));
+			$merchants = $this->jsonMapper->mapArray($merchantJson->data, [], get_class($this->container->get(Merchant::class)));
 		}
 
 		return $merchants;
@@ -99,7 +98,7 @@ class MerchantApi extends ApiRequestBase {
 		}
 		else
 		{
-			$returnMerchantBalanceAudit = $this->jsonMapper->mapArray($merchantAuditJson, [], get_class($this->container->get(MerchantBalanceAudit::class)));
+			$returnMerchantBalanceAudit = $this->jsonMapper->mapArray($merchantAuditJson->data, [], get_class($this->container->get(MerchantBalanceAudit::class)));
 		}
 
 		return $returnMerchantBalanceAudit;
@@ -125,7 +124,7 @@ class MerchantApi extends ApiRequestBase {
 		}
 		else
 		{
-			$returnMerchantOrderAudit = $this->jsonMapper->mapArray($merchantAuditJson, [], get_class($this->container->get(OrderAccountingAudit::class)));
+			$returnMerchantOrderAudit = $this->jsonMapper->mapArray($merchantAuditJson->data, [], get_class($this->container->get(OrderAccountingAudit::class)));
 		}
 
 		return $returnMerchantOrderAudit;
