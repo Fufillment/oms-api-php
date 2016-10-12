@@ -9,6 +9,7 @@
 namespace Fulfillment\OMS\Models\Response;
 
 use Fulfillment\OMS\Models\Response\Contracts\Sku as ResponseSkuContract;
+use Fulfillment\OMS\Models\Response\Contracts\SkuProduct;
 
 
 class Sku implements ResponseSkuContract
@@ -32,7 +33,7 @@ class Sku implements ResponseSkuContract
     public $skuProducts;
 
     /**
-     * @return array
+     * @return SkuProduct[]
      */
     public function getSkuProducts()
     {
@@ -40,7 +41,7 @@ class Sku implements ResponseSkuContract
     }
 
     /**
-     * @param array $skuProducts
+     * @param SkuProduct[] $skuProducts
      */
     public function setSkuProducts($skuProducts)
     {

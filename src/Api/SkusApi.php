@@ -18,7 +18,7 @@ class SkusApi extends ApiRequestBase {
 	 *
 	 * @return array|Sku[]
 	 */
-	public function getSkus($skuIds, $queryString = null)
+	public function getSkus($skuIds = '', $queryString = null)
 	{
 		if (is_null($queryString))
 		{
@@ -34,7 +34,7 @@ class SkusApi extends ApiRequestBase {
 		}
 		else
 		{
-			$skus = $this->jsonMapper->mapArray($skusJson, [], get_class($this->container->get(Sku::class)));
+			$skus = $this->jsonMapper->mapArray($skusJson->data, [], get_class($this->container->get(Sku::class)));
 		}
 
 		return $skus;

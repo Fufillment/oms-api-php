@@ -40,12 +40,12 @@ interface Sku {
 	public function setId($id);
 
 	/**
-	 * @return array
+	 * @return SkuProduct[]
 	 */
 	public function getSkuProducts();
 
 	/**
-	 * @param array $skuProducts
+	 * @param SkuProduct[] $skuProducts
 	 */
 	public function setSkuProducts($skuProducts);
 }

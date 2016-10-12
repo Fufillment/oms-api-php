@@ -8,7 +8,7 @@
 
 namespace Fulfillment\OMS\Models\Response;
 
-use Fulfillment\OMS\Models\Response\Contracts\CarrierMethods as ResponseCarrierMethodContracts;
+use Fulfillment\OMS\Models\Response\Contracts\CarrierMethod as ResponseCarrierMethodContracts;
 
 class CarrierMethod implements ResponseCarrierMethodContracts {
 	/**

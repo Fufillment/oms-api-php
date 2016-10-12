@@ -7,11 +7,7 @@
  */
 
 namespace Fulfillment\OMS\Tests;
-use Fulfillment\OMS\Models\Request\User;
 use Fulfillment\OMS\OmsClient;
-
-//use PHPUnit_Framework_TestCase;
-//require __DIR__.'/../vendor/autoload.php';
 
 
 class UnitTest extends \PHPUnit_Framework_TestCase{
@@ -30,11 +26,10 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Orders getOrders
 	 */
 	public function testGetOrders()
 	{
-//		$this->markTestSkipped( 'PHPUnit will skip this test method' );
 
 		$queryString = array(
 			'id' => '9595088'
@@ -42,7 +37,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 		$orders = $this->oms->orders->getOrders('2016-10-3', '2016-10-4', $queryString);
 	}
 	/**
-	 *
+	 * Orders getOrder
 	 */
 	public function testGetOrder()
 	{
@@ -50,7 +45,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Orders getStatusHistory
 	 */
 	public function testGetStatusHistory()
 	{
@@ -58,7 +53,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Orders getTracking
 	 */
 	public function testGetTracking()
 	{
@@ -68,7 +63,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Audits getMerchants
 	 */
 	public function testAuditGetMerchants()
 	{
@@ -80,7 +75,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Users getUsers
 	 */
 	public function testGetUsers()
 	{
@@ -92,7 +87,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Users getUser
 	 */
 	public function testGetUser()
 	{
@@ -102,7 +97,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Inventory listInventory
 	 */
 	public function testListInventory()
 	{
@@ -115,7 +110,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Inventory getInventory
 	 */
 	public function testGetInventory()
 	{
@@ -124,7 +119,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Inventory getInventoryAuditsById
 	 */
 	public function testGetInventoryAuditsById()
 	{
@@ -138,7 +133,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Merchants getMerchants
 	 */
 	public function testGetMerchants()
 	{
@@ -150,7 +145,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 		$audit = $this->oms->merchants->getMerchants($ids, $queryString);
 	}
 	/**
-	 *
+	 * Merchants getMerchantsById
 	 */
 	public function testGetMerchantById()
 	{
@@ -160,7 +155,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Merchants getMerchantAuditsById
 	 */
 	public function testGetMerchantAuditsById()
 	{
@@ -174,7 +169,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Merchants getOrderAccountingAuditById
 	 */
 	public function testGetOrderAccountingAuditById()
 	{
@@ -187,7 +182,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Merchants getInventoryByMerchantId
 	 */
 	public function testGetInventoryByMerchantId()
 	{
@@ -197,7 +192,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Merchants getShippingMethodsById
 	 */
 	public function testGetShippingMethodsById()
 	{
@@ -207,7 +202,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Merchants getProductById
 	 */
 	public function testGetProductsById()
 	{
@@ -217,17 +212,19 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 *
+	 * Merchants getSkusById
 	 */
 	public function testGetSkusById()
 	{
+		$this->markTestSkipped('The api needs to update its response body.');
+
 		$id = '50001';
 
 		$audit = $this->oms->merchants->getSkusById($id);
 	}
 
 	/**
-	 *
+	 * Merchants getUsersById
 	 */
 	public function testGetUsersById()
 	{
@@ -236,5 +233,40 @@ class UnitTest extends \PHPUnit_Framework_TestCase{
 		$audit = $this->oms->merchants->getUsersById($id);
 	}
 
+	/**
+	 * Skus getSkus
+	 */
+	public function testGetSkus()
+	{
+		$skuId       = '120569';
+		$queryString = [
+			'limit' => '1',
+			'page'  => '1',
+		];
+
+		$audit = $this->oms->skus->getSkus($skuId, $queryString);
+	}
+
+	/**
+	 * Skus getSkuById
+	 */
+	public function testGetSkuById()
+	{
+		$skuId = '120569';
+
+
+		$audit = $this->oms->skus->getSkuById($skuId);
+	}
+
+	/**
+	 * Skus getSkuById
+	 */
+	public function testGetSkuProductsBySkuId()
+	{
+		$skuId = '120569';
+
+
+		$audit = $this->oms->skus->getSkuProductsBySkuId($skuId);
+	}
 
 }

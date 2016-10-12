@@ -8,7 +8,7 @@
 
 namespace Fulfillment\OMS\Models\Response\Contracts;
 
-interface CarrierMethods {
+interface CarrierMethod {
 	/**
 	 * @return int
 	 */
