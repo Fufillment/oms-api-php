@@ -7,7 +7,8 @@
  */
 
 namespace Fulfillment\OMS\Api;
-use Fulfillment\OMS\Models\Request\Contracts\User;
+
+use Fulfillment\OMS\Models\Response\Contracts\User;
 
 
 /**
@@ -32,7 +33,7 @@ class UsersApi extends ApiRequestBase
         if ($this->jsonOnly) {
             $users = $json;
         } else {
-            $users = $this->jsonMapper->mapArray($json, [], get_class($this->container->get(User::class)));
+            $users = $this->jsonMapper->mapArray($json->data, [], get_class($this->container->get(User::class)));
         }
         return $users;
     }

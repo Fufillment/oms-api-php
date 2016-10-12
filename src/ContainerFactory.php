@@ -4,6 +4,9 @@
 namespace Fulfillment\OMS;
 
 
+use Fulfillment\OMS\Models\Response\MerchantShippingMethod;
+use Fulfillment\OMS\Models\Response\OrderAccountingAudit;
+use Fulfillment\OMS\Models\Response\MerchantBalanceAudit;
 use Fulfillment\OMS\Models\Response\SkuProduct;
 use Fulfillment\OMS\Models\Response\TrackingInfo;
 use Fulfillment\OMS\Models\Response\OrderStatus;
@@ -20,13 +23,19 @@ class ContainerFactory {
 	protected $defaultClasses = [
 		\Fulfillment\OMS\Models\Response\Contracts\Order::class        => Order::class,
 		\Fulfillment\OMS\Models\Response\Contracts\User::class         => User::class,
-		\Fulfillment\OMS\Models\Response\Contracts\Inventory::class    => Inventory::class,
-		\Fulfillment\OMS\Models\Response\Contracts\Merchant::class     => Merchant::class,
-		\Fulfillment\OMS\Models\Response\Contracts\Product::class      => Product::class,
-		\Fulfillment\OMS\Models\Response\Contracts\Sku::class          => Sku::class,
-		\Fulfillment\OMS\Models\Response\Contracts\OrderStatus::class  => OrderStatus::class,
-		\Fulfillment\OMS\Models\Response\Contracts\TrackingInfo::class => TrackingInfo::class,
-	    \Fulfillment\OMS\Models\Response\Contracts\SkuProduct::class => SkuProduct::class
+		\Fulfillment\OMS\Models\Response\Contracts\Inventory::class              => Inventory::class,
+		\Fulfillment\OMS\Models\Response\Contracts\Merchant::class               => Merchant::class,
+		\Fulfillment\OMS\Models\Response\Contracts\Product::class                => Product::class,
+		\Fulfillment\OMS\Models\Response\Contracts\Sku::class                    => Sku::class,
+		\Fulfillment\OMS\Models\Response\Contracts\OrderStatus::class            => OrderStatus::class,
+		\Fulfillment\OMS\Models\Response\Contracts\TrackingInfo::class           => TrackingInfo::class,
+		\Fulfillment\OMS\Models\Response\Contracts\SkuProduct::class             => SkuProduct::class,
+		\Fulfillment\OMS\Models\Response\Contracts\MerchantBalanceAudit::class   => MerchantBalanceAudit::class,
+		\Fulfillment\OMS\Models\Response\Contracts\OrderAccountingAudit::class   => OrderAccountingAudit::class,
+		\Fulfillment\OMS\Models\Response\Contracts\MerchantShippingMethod::class => MerchantShippingMethod::class,
+
+
+
 	];
 
 	protected $interfaces = [
@@ -37,8 +46,14 @@ class ContainerFactory {
 		\Fulfillment\OMS\Models\Response\Contracts\Product::class,
 		\Fulfillment\OMS\Models\Response\Contracts\Sku::class,
 		\Fulfillment\OMS\Models\Response\Contracts\OrderStatus::class,
-	    \Fulfillment\OMS\Models\Response\Contracts\TrackingInfo::class,
-	    \Fulfillment\OMS\Models\Response\Contracts\SkuProduct::class
+		\Fulfillment\OMS\Models\Response\Contracts\TrackingInfo::class,
+		\Fulfillment\OMS\Models\Response\Contracts\SkuProduct::class,
+		\Fulfillment\OMS\Models\Response\Contracts\MerchantBalanceAudit::class,
+		\Fulfillment\OMS\Models\Response\Contracts\OrderAccountingAudit::class,
+		\Fulfillment\OMS\Models\Response\Contracts\MerchantShippingMethod::class,
+
+
+
 	];
 
 	/**

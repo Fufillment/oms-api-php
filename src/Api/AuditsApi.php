@@ -8,6 +8,8 @@
 
 namespace Fulfillment\OMS\Api;
 
+use Fulfillment\OMS\Models\Response\Contracts\MerchantBalanceAudit as ResponseMerchantBalanceAuditContract;
+
 class AuditsApi extends ApiRequestBase {
 	public function getMerchants($queryString = null)
 	{
@@ -16,7 +18,7 @@ class AuditsApi extends ApiRequestBase {
 			$queryString = [];
 		}
 
-		$auditsJson = $this->apiClient->get('audits/balance', $queryString, $classToMapTo = MerchantBalanceAudit::class);
+		$auditsJson = $this->apiClient->get('audits/balance', $queryString);
 
 		if ($this->jsonOnly)
 		{
@@ -24,7 +26,7 @@ class AuditsApi extends ApiRequestBase {
 		}
 		else
 		{
-			$merchants = $this->jsonMapper->mapArray($auditsJson, [], $classToMapTo);
+			$merchants = $this->jsonMapper->mapArray($auditsJson->data, [], get_class($this->container->get(ResponseMerchantBalanceAuditContract::class)));
 		}
 
 		return $merchants;

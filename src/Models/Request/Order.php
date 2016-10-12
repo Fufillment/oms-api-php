@@ -29,6 +29,7 @@ class Order implements RequestOrderContract, Validatable {
 
     public function __construct($data = null)
     {
+        $data                    = [];
         $this->merchantId        = ArrayUtil::get($data['merchantId']);
         $this->merchantOrderId   = ArrayUtil::get($data['merchantOrderId']);
         $this->orderSkus         = ArrayUtil::get($data['orderSkus']);

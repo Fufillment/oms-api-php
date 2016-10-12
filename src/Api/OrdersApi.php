@@ -41,7 +41,7 @@ class OrdersApi extends ApiRequestBase
         if ($this->jsonOnly) {
             $orders = $ordersJson;
         } else {
-            $orders = $this->jsonMapper->mapArray($ordersJson, [], get_class($this->container->get(ResponseOrderContract::class)));
+            $orders = $this->jsonMapper->mapArray($ordersJson->data, [], get_class($this->container->get(ResponseOrderContract::class)));
         }
 
         return $orders;
@@ -215,7 +215,7 @@ class OrdersApi extends ApiRequestBase
         }
         else
         {
-            $tracking = $this->jsonMapper->mapArray($trackingJson, [], get_class($this->container->get(TrackingInfo::class)));
+            $tracking = $this->jsonMapper->mapArray($trackingJson->data, [], get_class($this->container->get(TrackingInfo::class)));
         }
 
         return $tracking;

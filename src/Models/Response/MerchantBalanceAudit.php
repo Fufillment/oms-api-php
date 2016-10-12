@@ -33,7 +33,7 @@ class MerchantBalanceAudit implements ResponseMerchantBalanceAuditContract {
 	 */
 	public $newBalance;
 	/**
-	 * @var string
+	 * @var string[]
 	 */
 	public $recordedOn;
 
