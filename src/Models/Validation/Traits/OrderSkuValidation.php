@@ -14,8 +14,8 @@ trait OrderSkuValidation
     protected function getValidationRules()
     {
         return [
-            v::attribute('sku', v::string()->notEmpty()),
-            v::attribute('quantity', v::int()->positive()),
+            v::attribute('sku', v::stringType()->notEmpty()),
+            v::attribute('quantity', v::intType()->positive()),
             v::attribute('declaredValue', v::numeric()->positive())
         ];
     }

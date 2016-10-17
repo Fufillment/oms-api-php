@@ -16,10 +16,10 @@ trait OrderValidation
         return [
             v::attribute('merchantId', v::numeric()->positive()),
             v::attribute('orderId', v::notEmpty()),
-            v::attribute('items', v::arr()), //TODO custom validation rule to test all of these
+            v::attribute('items', v::arrayType()), //TODO custom validation rule to test all of these
             v::attribute('recipient', v::instance('Fulfillment\OMS\Models\Request\Recipient')),
             v::attribute('recipient', v::callback([$this->recipient, 'validate'])),
-            v::attribute('shippingMethod', v::string())
+            v::attribute('shippingMethod', v::stringType())
         ];
     }
 }

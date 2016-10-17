@@ -15,7 +15,7 @@ trait UserValidation
     {
         return [
             v::attribute('merchantId', v::numeric()->positive()),
-            v::attribute('name', v::string()->notEmpty()),
+            v::attribute('name', v::stringType()->notEmpty()),
             v::attribute('email', v::email()->notEmpty()),
             v::attribute('contactInfo', v::instance('Fulfillment\OMS\Models\Request\Recipient')),
             v::attribute('createDate', v::date())
