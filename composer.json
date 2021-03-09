@@ -19,7 +19,7 @@
     "vlucas/phpdotenv": "~1.0",
     "league/climate": "^3.2",
     "netresearch/jsonmapper": "^0.8.0",
-    "fulfillment/api-wrapper": "dev-master",
+    "fulfillment/api-wrapper": "0.1",
     "league/container": "^2.0@dev"
   },
   "require-dev": {
